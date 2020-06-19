@@ -1,0 +1,15 @@
+.wy-side-nav-search {
+    background-color: #EFEFEF;
+}
+
+/* since we use definition lists only for source code,
+   it's more beautiful to have them without rst theme format */
+.rst-content dl dt {
+    display: block !important;
+    margin: 0 !important;
+    font-size: 16px !important;
+    background: #fcfcfc !important; 
+    border: 0 !important;
+    padding: 0 0 6px 0 !important;
+    color: #000000 !important;
+}

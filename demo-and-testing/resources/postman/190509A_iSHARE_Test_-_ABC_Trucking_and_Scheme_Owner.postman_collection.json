@@ -1,0 +1,552 @@
+{
+	"info": {
+		"_postman_id": "b70f57ce-11f1-4d0a-a093-88e8634b0dc2",
+		"name": "iSHARE Test - ABC Trucking and Scheme Owner",
+		"description": "Postman collection containing requests and responses from dummy party ABC Trucking towards the iSHARE Scheme Owner. The certificate tested in the /certificate_validation body is the test certificate from ABC Trucking.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Request access token from Scheme Owner",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0ab5e9d3-de41-4c6d-9dbf-0c5364a9ebda",
+						"exec": [
+							"iss = 'abc.client_id'\r",
+							"aud = 'so.client_id'\r",
+							"x5c = 'abc.public_key'\r",
+							"privateKey = 'abc.private_key'\r",
+							"\r",
+							"eval(globals.generateJwsToken)(iss, aud, x5c, privateKey);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "428b4bee-32ef-4f5b-a912-40edc6a0de3e",
+						"exec": [
+							"var soTokenResponse = JSON.parse(responseBody);",
+							"pm.globals.set(\"so.accesstoken.testcollection\", soTokenResponse.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "iSHARE",
+							"type": "text"
+						},
+						{
+							"key": "client_assertion_type",
+							"value": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+							"type": "text"
+						},
+						{
+							"key": "client_assertion",
+							"value": "{{client_assertion}}",
+							"description": "Copies ABC Trucking client_assertion from pre-request script",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "EU.EORI.NL000000001",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{so}}/connect/token",
+					"host": [
+						"{{so}}"
+					],
+					"path": [
+						"connect",
+						"token"
+					]
+				},
+				"description": "Requests an access token from the Scheme Owner, to be used for accessing Scheme Owner services.\nContains a pre-request script that creates a client_assertion via the iSHARE Testing function /generate-jws, to be used for testing purposes only.\nAfter successfully receiving the access token, it's value is stored as a global variable to be used for all other Scheme Owner services."
+			},
+			"response": []
+		},
+		{
+			"name": "Request capabilities overview from Scheme Owner",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"description": "Contains Bearer + received access token",
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{so.accesstoken.testcollection}}"
+					},
+					{
+						"description": "Requests that response is not signed, default is signed. Only for test, not allowed for Production.",
+						"key": "Do-Not-Sign",
+						"type": "text",
+						"value": "true",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{so}}/capabilities",
+					"host": [
+						"{{so}}"
+					],
+					"path": [
+						"capabilities"
+					]
+				},
+				"description": "Uses an access token to request an overview of iSHARE capabilities from the Scheme Owner. \nContains an optional Header to request that the response is not signed/encoded, this is for testing purposes only and not applicable to production environment."
+			},
+			"response": []
+		},
+		{
+			"name": "Request party data from Scheme Owner",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f12d3698-1f10-4a98-991b-e9a78c088d0e",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{so.accesstoken.testcollection}}"
+					},
+					{
+						"key": "Do-Not-Sign",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "true"
+					},
+					{
+						"key": "Content-Type",
+						"value": "true"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{so}}/parties?name=iSHARE*",
+					"host": [
+						"{{so}}"
+					],
+					"path": [
+						"parties"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "iSHARE*"
+						},
+						{
+							"key": "eori",
+							"value": "EU.EORI.NL*",
+							"description": "EORI of the party whose status we want to check (in this case dummy-AR)",
+							"disabled": true
+						},
+						{
+							"key": "active_only",
+							"value": "true",
+							"disabled": true
+						},
+						{
+							"key": "certified_only",
+							"value": "true",
+							"disabled": true
+						},
+						{
+							"key": "certificate_subject_name",
+							"value": "C=NL, SERIALNUMBER=NL000000004, CN=iSHARE Test Authorization Registry",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request trusted list of CAs from Scheme Owner",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "879237b5-f12c-43eb-9f5f-e9015ed3ce64",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{so.accesstoken.testcollection}}"
+					},
+					{
+						"key": "Do-Not-Sign",
+						"type": "text",
+						"value": "true"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{so}}/trusted_list",
+					"host": [
+						"{{so}}"
+					],
+					"path": [
+						"trusted_list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test only - request validity test of certificate from the Scheme Owner",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{so.accesstoken.testcollection}}",
+						"description": "Contains Bearer + received access token",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t\"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tDQpNSUlFZ3pDQ0FtdWdBd0lCQWdJSVliQ1laeGJ5NjJBd0RRWUpLb1pJaHZjTkFRRUxCUUF3U0RFWk1CY0dBMVVFDQpBd3dRYVZOSVFWSkZWR1Z6ZEVOQlgxUk1VekVOTUFzR0ExVUVDd3dFVkdWemRERVBNQTBHQTFVRUNnd0dhVk5JDQpRVkpGTVFzd0NRWURWUVFHRXdKT1REQWVGdzB4T0RBM01qVXhOVEExTkRaYUZ3MHlNREEzTWpReE5UQTFORFphDQpNRG94RlRBVEJnTlZCQU1NREVGQ1F5QlVjblZqYTJsdVp6RVVNQklHQTFVRUJSTUxUa3d3TURBd01EQXdNREV4DQpDekFKQmdOVkJBWVRBazVNTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFsRlZ2DQpubkMxYXdHcXBTa01MVW01KzZIbTlURW5VWHFWeDE1djhNNW5xUW9hQUF5RUlDVzc0UExzM3Q4c3BpM1ZSY1Q0DQord1djemlpN2dIbUNXMlVncWNZQ3ppQlFFclBHU2E0V2pYRkpmZE5ya3IzOGRweG15SUtHY284MGk0M3pkY05sDQpNWEJNOXQrNVMvQ0FnY1psTlNJZnU2Z1M4Y2h2NTA4a1QrWXhSaHZLWnBmQzAvM0FwbTFFa0JRalRjbWEwaUMrDQp6QWZoS1NjY252SEY5Z3huZjdCcDREZE9ZczVBYjh2RjBUTGR0WEF3emF5WGRhOFVjZTJzbW9FbEYxRmtIcjZoDQpFeTY3NkhFNUFZMlFsZjZUU21lKzFsSnV1V0FoanM3T3VTMitqMzFrR3N2ZmtNcUQ2WXJlWnorMm9JVmVONFFEDQo5SlEvZGozL2NDSWhSL2dPUFFJREFRQUJvMzh3ZlRBTUJnTlZIUk1CQWY4RUFqQUFNQjhHQTFVZEl3UVlNQmFBDQpGQlk4NXlEcDFwVHZIK1dpOGJqOHZ1cmZMRGVCTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQ0JnZ3JCZ0VGDQpCUWNEQkRBZEJnTlZIUTRFRmdRVWI3c0N2ZFNySEQxdEFVQmpBNnJSNm1MMUE0VXdEZ1lEVlIwUEFRSC9CQVFEDQpBZ1hnTUEwR0NTcUdTSWIzRFFFQkN3VUFBNElDQVFCd0lRblRmalEwQWJHTjZZR0pCZzROUVQzYUZ4QnNQNXpDDQpzUnJyK0x5WDkvaVI4NitCOUYrRmRWTkRUdmJ3cTZTRkZhdUF0RmJpaWhnL1ZNdEFFSmlXSmVEMTJhblpTMVgzDQpGbDVTb0N6RHRQVHczUmxlYm9BSlpOSWFoNDh1bVpzUE9JWEdHZzJmcnVRU04yR2lCQ1RiZmtwcHI4TXBIcUJPDQpwN0M2WXc2d1p4eW5LeldmZWVjWEsvazRzTFhCZEVaMkdSWUlMTi9MWjBEcUlCRk1JYkhNYUZmaUZldjJTRzVoDQo2SExhdHRuVWtXWno4TUhGZGxDb3lXSS9QRWErOFhLVlNHZ2IxRWRtUW4xR3JIVFFGTFpiL1dHMUpnMllTZ256DQpXSmtwMWhzMytMOGJwdjNGTE02T1NuaENRcXhDQTNWZHlrV0xNQ2wwbWkwZW9EQ3ZxWU12UVhKV3hyRFJJaDFSDQpCY282cE5JcFRmc29QNmYzWUtPcWx1NmRJQnRZZEg1RGFWMG1xdkc4YnJ6bjBUSDA1cDRjRm8zZDVjcU5vekZYDQpSWEdYclNXc3pyYk50cUNSMjRCRTBmUEZpeXJ6a21sU3IyR3YyUUEvR2hkVTFYWElDNU5CSjlrQmg4bjN5MzlaDQo3UkNjMlhqOUNJVHgrbjRGVXdaREprQ0QwYnpRbm4xQlZ0U3VuaXVTT1R6MGtnN1lMUXVYdjlWb3IrVFUrdTh1DQpyeUc1MDh3UjF2b2JUM3VKS3VqU0lpYjRlZDZQblhYa3lyZE4vc0tVR1dsSkR1bEdsVVlCcU1mUkRISng2VDhrDQpELytHWGRIKzQ2bWJQckxFL0RBVnl5SXcrTXRlMTFRSXo4d2Z2Z3FvRnlRZXZ2UVJ4NDlpYjMzL1ZJRXBwQmtQDQp6SlQ5SDdXYVVBPT0NCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0=\"\n]"
+				},
+				"url": {
+					"raw": "{{so}}/certificate_validation?",
+					"host": [
+						"{{so}}"
+					],
+					"path": [
+						"certificate_validation"
+					],
+					"query": [
+						{
+							"key": "date_time",
+							"value": "Date time for which the certificate information is requested. If provided the result becomes final and therefore MUST be cacheable",
+							"description": "Optional field",
+							"disabled": true
+						}
+					]
+				},
+				"description": "This functionality is only for testing purposes, only iSHARE Test certificates will be processed. Production API from Scheme Owner will not provide this feature."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "816ddeb5-f5dd-485a-9275-a7720ee61397",
+				"type": "text/javascript",
+				"exec": [
+					"gl = { ",
+					"    arrayBufferToString: function (buffer){",
+					"        var arr = new Uint8Array(buffer);",
+					"        var str = String.fromCharCode.apply(String, arr);",
+					"        if(/[\\u0080-\\uffff]/.test(str)){",
+					"            throw new Error('this string seems to contain (still encoded) multibytes');",
+					"        }",
+					"        return str;",
+					"    },",
+					"    ",
+					"    createGenerateJwsRequest: function(iss, aud, x5c, privateKey) {",
+					"          console.log('Generate assertion for ' + JSON.stringify({",
+					"              iss: iss,",
+					"              aud: aud,",
+					"              x5c: x5c,",
+					"              privateKey: privateKey",
+					"          }));",
+					"          ",
+					"          var request =  {",
+					"                      url: pm.variables.get('so') + '/testing/generate-jws',",
+					"                      method: 'POST',",
+					"                      header: {",
+					"                          'alg': \"RS256\",",
+					"                          'typ': \"JWT\",",
+					"                          'iss': pm.variables.get(iss),",
+					"                          'aud': pm.variables.get(aud),",
+					"                          'x5c': pm.variables.get(x5c)",
+					"                      },",
+					"                      body: {",
+					"                        mode: 'raw',",
+					"                        raw: pm.variables.get(privateKey)",
+					"                      }",
+					"                };",
+					"         console.log('Request ' + JSON.stringify(request));",
+					"         return request;",
+					"    },",
+					"    ",
+					"    createConnectTokenRequest: function(base, clientId, clientAssertion) {",
+					"          console.log('Create token request ' + JSON.stringify({",
+					"              base: base, ",
+					"              clientId: clientId, ",
+					"              clientAssertion: clientAssertion",
+					"          }));",
+					"                return {",
+					"                      url: pm.variables.get(base) + '/connect/token',",
+					"                      method: 'POST',",
+					"\t\t\t\t\t  header: {",
+					"\t\t\t\t\t\t'Accept': 'application/json',",
+					"\t\t\t\t\t\t'Content-Type': 'application/x-www-form-urlencoded'",
+					"\t\t\t\t\t  },",
+					"                      body: {",
+					"                       mode: 'urlencoded',",
+					"\t\t\t\t\t   urlencoded: [",
+					"\t\t\t\t\t\t{key: 'grant_type', value: 'client_credentials'},",
+					"\t\t\t\t\t\t{key: 'scope', value: 'iSHARE'},\t",
+					"\t\t\t\t\t\t{key: 'client_assertion_type', value: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'},\t\t\t\t\t\t\t",
+					"\t\t\t\t\t\t{key: 'client_assertion', value: clientAssertion },",
+					"\t\t\t\t\t\t{key: 'client_id', value: pm.variables.get(clientId) },",
+					"\t\t\t\t\t   ]",
+					"                      }",
+					"                }",
+					"    },",
+					"    ",
+					"    createConnectTokenRequestSpa: function(base, scope, user, password) {",
+					"          console.log('Create token request ' + JSON.stringify({",
+					"              base: base, ",
+					"              user: user,",
+					"              scope: scope",
+					"          }));",
+					"                return {",
+					"                      url: pm.variables.get(base) + '/connect/token',",
+					"                      method: 'POST',",
+					"\t\t\t\t\t  header: {",
+					"\t\t\t\t\t\t'Accept': 'application/json',",
+					"\t\t\t\t\t\t'Content-Type': 'application/x-www-form-urlencoded'",
+					"\t\t\t\t\t  },",
+					"                      body: {",
+					"                       mode: 'urlencoded',",
+					"\t\t\t\t\t   urlencoded: [",
+					"\t\t\t\t\t\t{key: 'grant_type', value: 'password'},",
+					"\t\t\t\t\t\t{key: 'scope', value: scope},\t",
+					"\t\t\t\t\t\t{key: 'client_secret', value: 'secret'},\t",
+					"\t\t\t\t\t\t{key: 'client_id', value: 'spa' },",
+					"\t\t\t\t\t\t{key: 'username', value: pm.variables.get(user) },",
+					"\t\t\t\t\t\t{key: 'password', value: pm.variables.get(password) }",
+					"\t\t\t\t\t   ]",
+					"                      }",
+					"                }",
+					"    }",
+					"}",
+					"",
+					"postman.setGlobalVariable(\"getAccessToken\", (iss, aud, x5c, privateKey, url, handler) => { ",
+					"\t\t  ",
+					"           console.log('getAccessToken ' + JSON.stringify({",
+					"              iss: iss,",
+					"              aud: aud,",
+					"              privateKey: privateKey,",
+					"              x5c: x5c,",
+					"              url: url,",
+					"              handler: handler !== 'undefined' ? 'handler is provided' : 'handler is not provided'",
+					"          }));",
+					"          ",
+					"          ",
+					"\t      pm.sendRequest(gl.createGenerateJwsRequest(iss, aud, x5c, privateKey), function (err, response) {",
+					"\t            ",
+					"\t\t\t\tif (err === null && response != null && response.code == 200) {",
+					"    \t\t\t\tconst clientAssertion = gl.arrayBufferToString(response.stream);",
+					"    \t\t\t   ",
+					"    \t\t\t\tpm.sendRequest(gl.createConnectTokenRequest(url, iss, clientAssertion), function (err, response) {",
+					"    \t\t\t\t        if (err === null && response != null && response.code == 200) {",
+					"    \t\t\t\t            const accessToken = response.json().access_token;",
+					"    \t\t\t\t            handler(err, accessToken);",
+					"    \t\t\t\t        }",
+					"        \t\t\t\t\telse {",
+					"        \t\t\t\t\t    console.log('ERR!!! Access Token could not be retrieved. Error: ' + err);",
+					"        \t\t\t\t\t    handler(err, null);",
+					"        \t\t\t\t\t}",
+					"    \t\t\t\t});",
+					"\t\t\t\t} else {",
+					"\t\t\t\t    console.log('ERR!!! client_assertion could not be retrieved. Error: ' + err);",
+					"\t\t\t\t    handler(err, null);",
+					"\t\t\t\t}",
+					"\t\t\t});",
+					"",
+					"});",
+					"",
+					"postman.setGlobalVariable(\"getAccessTokenSpa\", (url, scope, user, password, handler) => { ",
+					"\t\t  ",
+					"           console.log('getAccessTokenSpa ' + JSON.stringify({",
+					"              url: url,",
+					"              user: user,",
+					"              handler: handler !== 'undefined' ? 'handler is provided' : 'handler is not provided'",
+					"          }));",
+					"          ",
+					"          ",
+					"\t     \tpm.sendRequest(gl.createConnectTokenRequestSpa(url, scope, user, password), function (err, response) {",
+					"    \t\t\t\t        if (err === null && response != null && response.code == 200) {",
+					"    \t\t\t\t            const accessToken = response.json().access_token;",
+					"    \t\t\t\t            handler(err, accessToken);",
+					"    \t\t\t\t        }",
+					"        \t\t\t\t\telse {",
+					"        \t\t\t\t\t    console.log('ERR!!! Access Token could not be retrieved for spa client. Error: ' + err);",
+					"        \t\t\t\t\t    handler(err, null);",
+					"        \t\t\t\t\t}",
+					"    \t\t\t\t});",
+					"",
+					"});",
+					"",
+					"postman.setGlobalVariable(\"getDelegationEvidence\", (delegationMask, iss, aud, x5c, privateKey, handler) => { ",
+					"\t\t  ",
+					"           console.log('getDelegationEvidence ' + JSON.stringify({",
+					"              delegationMask: JSON.stringify(delegationMask), ",
+					"              iss: iss,",
+					"              aud: aud,",
+					"              privateKey: privateKey,",
+					"              x5c: x5c,",
+					"              handler: handler !== 'undefined' ? 'handler is provided' : 'handler is not provided'",
+					"          }));",
+					"          ",
+					"          // get an access token from ar",
+					"          eval(globals.getAccessToken)(iss, aud, x5c, privateKey, 'ar', function(err, accessToken){",
+					"              if (err === null) {",
+					"                    const delegationRequest = {",
+					"                      url: pm.variables.get('ar') + '/delegation',",
+					"                      method: 'POST',",
+					"\t\t\t\t\t  header: {",
+					"\t\t\t\t\t\t'Authorization': 'Bearer ' + accessToken,",
+					"\t\t\t\t\t    'Content-Type': 'application/json'",
+					"\t\t\t\t\t  },",
+					"                      body: {",
+					"                       mode: 'raw',",
+					"\t\t\t\t\t   raw: JSON.stringify(delegationMask)",
+					"                      }",
+					"                    };",
+					"    \t\t\t\tpm.sendRequest(delegationRequest, function(err, response) {",
+					"    \t\t\t\t    if (err === null && response != null && response.code == 200) {",
+					"    \t\t\t\t        const delegationToken = response.json().delegation_token;",
+					"    \t\t\t\t        handler(err, delegationToken);",
+					"    \t\t\t\t    } else {",
+					"    \t\t\t\t        console.log('ERR!!! delegation_evidence could not be retrieved. Error: ' + err);",
+					"    \t\t\t\t        handler(err, null);",
+					"    \t\t\t\t    }",
+					"    \t\t\t\t});",
+					"              }",
+					"          });",
+					"});",
+					"",
+					"postman.setGlobalVariable('authorizeContainers', (delegationMask, iss, aud, x5c, privateKey, url) => {",
+					"    eval(globals.getAccessToken)(iss, aud, x5c, privateKey, url, function(err, accessToken){",
+					"        ",
+					"        if (accessToken != null)",
+					"        {",
+					"            pm.variables.set('access_token', accessToken); ",
+					"            ",
+					"            eval(globals.getDelegationEvidence)(delegationMask, iss, 'ar.client_id', x5c, privateKey, function(err, response){",
+					"                    ",
+					"                    var delegationEvidence = response || \"no valid delegation evidence\";",
+					"                    ",
+					"                    pm.variables.set('delegation_evidence', delegationEvidence);",
+					"                }",
+					"            );",
+					"        }",
+					"    }",
+					"  );",
+					"});",
+					"",
+					"postman.setGlobalVariable('authorize', (iss, aud, x5c, privateKey, url) => {",
+					"    eval(globals.getAccessToken)(iss, aud, x5c, privateKey, url, function(err, accessToken){",
+					"        ",
+					"        if (accessToken != null)",
+					"        {",
+					"            pm.variables.set('access_token', accessToken); ",
+					"        }",
+					"    }",
+					"  );",
+					"});",
+					"",
+					"postman.setGlobalVariable('authorizeSpa', (url, scope, user, password) => {",
+					"    eval(globals.getAccessTokenSpa)(url, scope, user, password, function(err, accessToken){",
+					"        ",
+					"        if (accessToken != null)",
+					"        {",
+					"            pm.variables.set('access_token', accessToken); ",
+					"        }",
+					"    }",
+					"  );",
+					"});",
+					"",
+					"postman.setGlobalVariable('generateJwsToken', (iss, aud, x5c, privateKey) => {",
+					"    pm.sendRequest(gl.createGenerateJwsRequest(iss, aud, x5c, privateKey), function (err, response) {",
+					"\t\t\t\tif (err === null && response != null && response.code == 200) {",
+					"    \t\t\t\tconst clientAssertion = gl.arrayBufferToString(response.stream);",
+					"    \t\t\t   ",
+					"    \t\t\t\tpm.variables.set('client_assertion', clientAssertion);",
+					"\t\t\t\t} else {",
+					"\t\t\t\t    console.log('ERR!!! client_assertion could not be retrieved. Error: ' + err);",
+					"\t\t\t\t    handler(err, null);",
+					"\t\t\t\t}",
+					"\t\t\t});",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "ba596980-e1fc-4d67-a72f-3d4d8dc0cbb9",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

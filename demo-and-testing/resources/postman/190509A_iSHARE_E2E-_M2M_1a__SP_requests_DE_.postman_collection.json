@@ -1,0 +1,1326 @@
+{
+	"info": {
+		"_postman_id": "a1afe8ea-f633-4c4a-b141-17c50ebbb5ff",
+		"name": "iSHARE E2E: M2M 1a (SP requests DE)",
+		"description": "In this collection, we impersonate an End-2-End flow, where a trucking company, ABC Trucking, asks data on some container (container Z) stored at Warehouse 13. The right to this data is owned by Banana and Co, who has delegated this right to ABC Trucking. This delegation is stored at AskMeAnything, an authorization registry. Thus, if ABC Trucking requests the data, Warehouse 13 will need to check with AskMeAnything if Banana and Co actually allowed ABC Trucking to get this data.\n\nThus, \nABC Trucking  is the service consumer. Party_id: EU.EORI.NL000000001\nWarehouse 13  is the service provider. Party_id: EU.EORI.NL000000003\nBanana & Co.  is the entitled party.   Party_id: EU.EORI.NL000000005\nAskMeAnything is the authz. registry.  Party_id: EU.EORI.NL000000004\n\nFor this case it is also useful to know the party_id of the Scheme Owner: EU.EORI.NL000000000\n\n1. The flow starts with ABC Trucking requesting an access token from Warehouse 13.\n2.a. behind the scenes Warehouse 13 verifies ABC Trucking at the Scheme Owner.\n2.b. if ABC Trucking is verified, Warehouse 13 can return an access token to ABC Trucking\n3. With this access token, ABC Trucking will try to get some service from Warehouse 13, such as getting data on container Z.\n4.a. behind the scenes, Warehouse 13 will check if ABC Trucking is allowed to do so\n4.b. Warehouse 13 will check if AskMeAnything is a valid iSHARE Authorization Registry at the Scheme Owner and will also find there how it can reach AskMeAnything\n4.c. Warehouse 13 will request an access token from AskMeAnything (which will also behind the scenes check if Warehouse 13 is a valid iSHARE Party with the Scheme Owner)\n4.d. with this access token, Warehouse 13 will ask AskMeAnything for delegation evidence concerning container Z from Banana and Co to ABC Trucking.\n4.e. Warehouse 13 validates the delegation evidence and if everything is okay, returns the requested data to ABC Trucking.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Beforehand: getting the trusted list",
+			"item": [
+				{
+					"name": "W13 requests access token from Scheme Owner",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0ab5e9d3-de41-4c6d-9dbf-0c5364a9ebda",
+								"exec": [
+									"iss = 'w13.client_id'\r",
+									"aud = 'so.client_id'\r",
+									"x5c = 'w13.public_key'\r",
+									"privateKey = 'w13.private_key'\r",
+									"\r",
+									"eval(globals.generateJwsToken)(iss, aud, x5c, privateKey);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "428b4bee-32ef-4f5b-a912-40edc6a0de3e",
+								"exec": [
+									"var soTokenResponse = JSON.parse(responseBody);",
+									"pm.globals.set(\"so.accesstoken.testcollection\", soTokenResponse.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "iSHARE",
+									"type": "text"
+								},
+								{
+									"key": "client_assertion_type",
+									"value": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+									"type": "text"
+								},
+								{
+									"key": "client_assertion",
+									"value": "{{client_assertion}}",
+									"description": "Copies W13 client_assertion from pre-request script",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "EU.EORI.NL000000003",
+									"description": "Id of party doing the request (W13)",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{so}}/connect/token",
+							"host": [
+								"{{so}}"
+							],
+							"path": [
+								"connect",
+								"token"
+							]
+						},
+						"description": "Requests an access token from the Scheme Owner, to be used for accessing Scheme Owner services.\nContains a pre-request script that creates a client_assertion via the iSHARE Testing function /generate-jws, to be used for testing purposes only.\nAfter successfully receiving the access token, it's value is stored as a global variable to be used for all other Scheme Owner services."
+					},
+					"response": []
+				},
+				{
+					"name": "W13 requests trusted list of CAs from Scheme Owner",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "879237b5-f12c-43eb-9f5f-e9015ed3ce64",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{so.accesstoken.testcollection}}"
+							},
+							{
+								"key": "Do-Not-Sign",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{so}}/trusted_list",
+							"host": [
+								"{{so}}"
+							],
+							"path": [
+								"trusted_list"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Before the use-case starts, three parties will need to get the trusted list from the Scheme Owner, which contains the CAs that are trusted in iSHARE. They need this trusted list to verify certificates that iSHARE Parties MUST provide to sign their JWTs.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ae59481d-06e4-48be-a24c-8561532309aa",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "6bd22d40-9215-4656-9de9-21cbf36dea30",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "ABC requests an access token from W13",
+			"item": [
+				{
+					"name": "ABC requests an access token from W13",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1003aa1b-de32-4515-944d-6453f68de805",
+								"exec": [
+									"var wTokenResponse = responseBody;",
+									"var wTokenAccess = JSON.parse(responseBody);",
+									"pm.globals.set(\"abc.client_assertion\", wTokenResponse);",
+									"pm.globals.set(\"w13.accesstoken.containerdata\", wTokenAccess.access_token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "56c1f88b-ee41-4834-9331-252500e4d258",
+								"exec": [
+									"iss = 'abc.client_id'\r",
+									"aud = 'w13.client_id'\r",
+									"x5c = 'abc.public_key'\r",
+									"privateKey = 'abc.private_key'\r",
+									"\r",
+									"eval(globals.generateJwsToken)(iss, aud, x5c, privateKey);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "iSHARE",
+									"type": "text"
+								},
+								{
+									"key": "client_assertion_type",
+									"value": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+									"type": "text"
+								},
+								{
+									"key": "client_assertion",
+									"value": "{{client_assertion}}",
+									"description": "The client_assertion is generated in the pre-request script. Generation of client_assertion SHOULD always be done locally, never share your private keys!",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "EU.EORI.NL000000001",
+									"description": "The Id of ABC Trucking, requesting the connect token.",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{w13}}/connect/token",
+							"host": [
+								"{{w13}}"
+							],
+							"path": [
+								"connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "76f03890-986d-4280-a364-fab3a9d15661",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d358b29-1552-41f5-b264-37fbbe4a9ae8",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Behind the scenes: W13 verifies ABC Trucking",
+			"item": [
+				{
+					"name": "W13 requests access token from Scheme Owner",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0ab5e9d3-de41-4c6d-9dbf-0c5364a9ebda",
+								"exec": [
+									"iss = 'w13.client_id'\r",
+									"aud = 'so.client_id'\r",
+									"x5c = 'w13.public_key'\r",
+									"privateKey = 'w13.private_key'\r",
+									"\r",
+									"eval(globals.generateJwsToken)(iss, aud, x5c, privateKey);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "428b4bee-32ef-4f5b-a912-40edc6a0de3e",
+								"exec": [
+									"var soTokenResponse = JSON.parse(responseBody);",
+									"pm.globals.set(\"so.accesstoken.testcollection\", soTokenResponse.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "iSHARE",
+									"type": "text"
+								},
+								{
+									"key": "client_assertion_type",
+									"value": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+									"type": "text"
+								},
+								{
+									"key": "client_assertion",
+									"value": "{{client_assertion}}",
+									"description": "Copies W13 client_assertion from pre-request script",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "EU.EORI.NL000000003",
+									"description": "Id of party doing the request (W13)",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{so}}/connect/token",
+							"host": [
+								"{{so}}"
+							],
+							"path": [
+								"connect",
+								"token"
+							]
+						},
+						"description": "Requests an access token from the Scheme Owner, to be used for accessing Scheme Owner services.\nContains a pre-request script that creates a client_assertion via the iSHARE Testing function /generate-jws, to be used for testing purposes only.\nAfter successfully receiving the access token, it's value is stored as a global variable to be used for all other Scheme Owner services."
+					},
+					"response": []
+				},
+				{
+					"name": "W13 checks ABC at Scheme Owner",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f12d3698-1f10-4a98-991b-e9a78c088d0e",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{so.accesstoken.testcollection}}",
+								"type": "text"
+							},
+							{
+								"key": "Do-Not-Sign",
+								"name": "Content-Type",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "true"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{so}}/parties?eori=EU.EORI.NL000000001&certificate_subject_name=C=NL, SERIALNUMBER=EU.EORI.NL000000001, CN=ABC Trucking",
+							"host": [
+								"{{so}}"
+							],
+							"path": [
+								"parties"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "eori",
+									"value": "EU.EORI.NL000000001",
+									"description": "EORI of the party whose status we want to check (in this case ABC Trucking)"
+								},
+								{
+									"key": "active_only",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "certified_only",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "certificate_subject_name",
+									"value": "C=NL, SERIALNUMBER=EU.EORI.NL000000001, CN=ABC Trucking"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "7c6b93be-24dc-4dee-9187-e11e0631628a",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "1d72b535-534f-474f-aff3-ab99928b3406",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "ABC Trucking can now request service",
+			"item": [
+				{
+					"name": "GET request from ABC to W13 for container data",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "123bd7e8-7edb-437d-8a69-4db577666084",
+								"exec": [
+									"iss = 'abc.client_id'\r",
+									"aud = 'w13.client_id'\r",
+									"x5c = 'abc.public_key'\r",
+									"privateKey = 'abc.private_key'\r",
+									"\r",
+									"eval(globals.generateJwsToken)(iss, aud, x5c, privateKey);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{w13.accesstoken.containerdata}}",
+								"type": "text"
+							},
+							{
+								"key": "client_assertion",
+								"value": "{{client_assertion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{w13}}/containers/180621.CONTAINER-Z",
+							"host": [
+								"{{w13}}"
+							],
+							"path": [
+								"containers",
+								"180621.CONTAINER-Z"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT request from ABC to W13 for container data",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "225545ff-f5a5-4883-9ac5-7426c77c4c2d",
+								"exec": [
+									"iss = 'abc.client_id'\r",
+									"aud = 'w13.client_id'\r",
+									"x5c = 'abc.public_key'\r",
+									"privateKey = 'abc.private_key'\r",
+									"\r",
+									"eval(globals.generateJwsToken)(iss, aud, x5c, privateKey);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{w13.accesstoken.containerdata}}"
+							},
+							{
+								"key": "client_assertion",
+								"type": "text",
+								"value": "{{client_assertion}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"weight\": 17.25,\r\n  \"eta\": \"1136\"\r\n}"
+						},
+						"url": {
+							"raw": "{{w13}}/containers/180621.CONTAINER-Z",
+							"host": [
+								"{{w13}}"
+							],
+							"path": [
+								"containers",
+								"180621.CONTAINER-Z"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "W13 has verified the status of ABC Trucking (valid) and should verify the certificate and client assertion. After that, it will return an access token to ABC Trucking, which ABC Trucking can use to get some service from W13.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "7b581b32-c609-49c0-bab9-b16e8216e1a4",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "414c6e1b-27f3-4b4c-8a35-a4da77a6c26f",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Behind the scenes: W13 checks for delegation evidence",
+			"item": [
+				{
+					"name": "Request access token from Scheme Owner",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0ab5e9d3-de41-4c6d-9dbf-0c5364a9ebda",
+								"exec": [
+									"iss = 'w13.client_id'\r",
+									"aud = 'so.client_id'\r",
+									"x5c = 'w13.public_key'\r",
+									"privateKey = 'w13.private_key'\r",
+									"\r",
+									"eval(globals.generateJwsToken)(iss, aud, x5c, privateKey);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "428b4bee-32ef-4f5b-a912-40edc6a0de3e",
+								"exec": [
+									"var soTokenResponse = JSON.parse(responseBody);",
+									"pm.globals.set(\"so.accesstoken.testcollection\", soTokenResponse.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "iSHARE",
+									"type": "text"
+								},
+								{
+									"key": "client_assertion_type",
+									"value": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+									"type": "text"
+								},
+								{
+									"key": "client_assertion",
+									"value": "{{client_assertion}}",
+									"description": "Copies W13 client_assertion from pre-request script",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "EU.EORI.NL000000003",
+									"description": "Id of party doing the request (W13)",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{so}}/connect/token",
+							"host": [
+								"{{so}}"
+							],
+							"path": [
+								"connect",
+								"token"
+							]
+						},
+						"description": "Requests an access token from the Scheme Owner, to be used for accessing Scheme Owner services.\nContains a pre-request script that creates a client_assertion via the iSHARE Testing function /generate-jws, to be used for testing purposes only.\nAfter successfully receiving the access token, it's value is stored as a global variable to be used for all other Scheme Owner services."
+					},
+					"response": []
+				},
+				{
+					"name": "W13 checks AR at Scheme Owner and finds endpoint",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f12d3698-1f10-4a98-991b-e9a78c088d0e",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{so.accesstoken.testcollection}}"
+							},
+							{
+								"key": "Do-Not-Sign",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"value": "true"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{so}}/parties?eori=EU.EORI.NL000000004&certificate_subject_name=C=NL, SERIALNUMBER=EU.EORI.NL000000004, CN=iSHARE Test Authorization Registry",
+							"host": [
+								"{{so}}"
+							],
+							"path": [
+								"parties"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "eori",
+									"value": "EU.EORI.NL000000004",
+									"description": "EORI of the party whose status we want to check (in this case dummy-AR)"
+								},
+								{
+									"key": "active_only",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "certified_only",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "certificate_subject_name",
+									"value": "C=NL, SERIALNUMBER=EU.EORI.NL000000004, CN=iSHARE Test Authorization Registry"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "W13 requests access token from AR",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e6c1863e-f563-41e1-8dcd-3a5525039958",
+								"exec": [
+									"iss = 'w13.client_id'\r",
+									"aud = 'ar.client_id'\r",
+									"x5c = 'w13.public_key'\r",
+									"privateKey = 'w13.private_key'\r",
+									"\r",
+									"eval(globals.generateJwsToken)(iss, aud, x5c, privateKey);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "40fc0b94-f848-4502-946c-bb4de5e46303",
+								"exec": [
+									"var arTokenResponse = JSON.parse(responseBody);",
+									"pm.globals.set(\"ar.accesstoken.testcollection\", arTokenResponse.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "iSHARE",
+									"type": "text"
+								},
+								{
+									"key": "client_assertion_type",
+									"value": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+									"type": "text"
+								},
+								{
+									"key": "client_assertion",
+									"value": "{{client_assertion}}",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "EU.EORI.NL000000003",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ar}}/connect/token",
+							"host": [
+								"{{ar}}"
+							],
+							"path": [
+								"connect",
+								"token"
+							]
+						},
+						"description": "Warehouse 13 requests an access token from Authorization Registry. The pre-request script generates a valid client assertion for this request and therefore includes the private key of Warehouse 13. In any real API request, this client assertion should be generated locally and one should never share their private keys."
+					},
+					"response": []
+				},
+				{
+					"name": "W13 requests capabilites from AR",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e6c1863e-f563-41e1-8dcd-3a5525039958",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "40fc0b94-f848-4502-946c-bb4de5e46303",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ar.accesstoken.testcollection}}",
+								"type": "text"
+							},
+							{
+								"key": "Do-Not-Sign",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{ar}}/capabilities",
+							"host": [
+								"{{ar}}"
+							],
+							"path": [
+								"capabilities"
+							]
+						},
+						"description": "Warehouse 13 requests the capabilities from the AR to see where the delegation endpoint is"
+					},
+					"response": []
+				},
+				{
+					"name": "W13 requests del evidence using client_assertion from ABC",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ar.accesstoken.testcollection}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "previous_steps",
+								"value": "[\"{{abc.client_assertion}}\"]",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Do-Not-Sign",
+								"value": "True"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"delegationRequest\": {\n\t\t\"policyIssuer\": \"EU.EORI.NL000000005\",\n\t\t\"target\": {\n\t\t\t\"accessSubject\": \"EU.EORI.NL000000001\"\n\t\t},\n\t\t\"policySets\": [\n\t\t\t\n\t\t\t{\n\t\t\t\t\"policies\" : [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"target\": {\n\t\t\t\t\t\t\t\"resource\": {\n\t\t\t\t\t\t\t\t\"type\": \"GS1.CONTAINER\",\n\t\t\t\t\t\t\t\t\"identifiers\": [\"180621.CONTAINER-Z\"],\n\t\t\t\t\t\t\t\t\"attributes\": [\"GS1.CONTAINER.ATTRIBUTE.ETA\", \"GS1.CONTAINER.ATTRIBUTE.WEIGHT\"]\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\"actions\": [\"ISHARE.READ\", \"ISHARE.CREATE\", \"ISHARE.UPDATE\", \"ISHARE.DELETE\"],\n\t\t\t\t\t\t\t\"environment\": {\n\t\t\t\t\t\t\t\t\"serviceProviders\":[\"EU.EORI.NL000000003\"]\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"rules\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"effect\": \"Permit\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t},\n\t\"previous_steps\": [\"{{w13.assertion.containerdata}}\"]\n}"
+						},
+						"url": {
+							"raw": "{{ar}}/delegation",
+							"host": [
+								"{{ar}}"
+							],
+							"path": [
+								"delegation"
+							]
+						},
+						"description": "W13 delegates rights to ABC Trucking. W13 allows ABC READ access to the ETA of all of W13's containers."
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImI0ZmI1ZDZkMGE0NDUxYjYxZDMzZTQyMWYwODU4NTBhIiwidHlwIjoiSldUIn0.eyJuYmYiOjE1MzE4OTkzMjYsImV4cCI6MTUzMTkwMjkyNiwiaXNzIjoiaHR0cHM6Ly9pc2hhcmUtYXItcWEuYXp1cmV3ZWJzaXRlcy5uZXQiLCJhdWQiOlsiaHR0cHM6Ly9pc2hhcmUtYXItcWEuYXp1cmV3ZWJzaXRlcy5uZXQvcmVzb3VyY2VzIiwiaVNIQVJFIl0sImNsaWVudF9pZCI6IkVVLkVPUkkuTkwwMDAwMDAwMDMiLCJzY29wZSI6WyJpU0hBUkUiXX0.BcsCVW9sYLd1avAvkUJnli_Tc1ZHTs2X408so9_XmO7OyPxCwMbugwFMJJM6u5DWXEuVUmbC6PIgVc8GWhgomWaZ48IbvJHWyGqGnAGWhY7pZC246pY5cA_oWFtl03HzfEdYRfiugWjEjKvIvI0UoIbSkwXTzOKEuHzfDNnd87YgriTQR5Ep99LP8Vji6QC4q-1b8_uS6fAI1OeXXSUHB20DA8A0A3OkD4lcXK3Ke_oQnlZ-5DD_Mxd4J8OXARwJqipXcfD2CkjwTf6vUlu1AGJgDSINPju1I7YlJFekby2fKY8-ptl6J7p6h-TxH7rrZ75n8q39AKBoqGYT5yVY5A"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"delegationRequest\": {\n\t\t\"policyIssuer\": \"EU.EORI.NL000000003\",\n\t\t\"target\": {\n\t\t\t\"accessSubject\": \"EU.EORI.NL000000001\"\n\t\t},\n\t\t\"policySets\": [\n\t\t\t\n\t\t\t{\n\t\t\t\t\"policies\" : [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"target\": {\n\t\t\t\t\t\t\t\"resource\": {\n\t\t\t\t\t\t\t\t\"type\": \"CONTAINER.DATA\",\n\t\t\t\t\t\t\t\t\"identifiers\": [\"180621.ABC130\"],\n\t\t\t\t\t\t\t\t\"attributes\": [\"CONTAINER.DATA.ATTRIBUTE.ETA\"]\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\"actions\": [\"ISHARE.READ\"]\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"rules\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"effect\": \"Permit\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t}\n}      "
+								},
+								"url": {
+									"raw": "{{ar}}/delegation",
+									"host": [
+										"{{ar}}"
+									],
+									"path": [
+										"delegation"
+									]
+								},
+								"description": "W13 delegates rights to ABC Trucking. W13 allows ABC READ access to the ETA of all of W13's containers."
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 13 Jun 2018 12:51:24 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Server",
+									"value": "Kestrel",
+									"name": "Server",
+									"description": "A name for the server"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"body": "{\"valid\":true}"
+						},
+						{
+							"name": "401 Unauthorized w13 bearer",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImI0ZmI1ZDZkMGE0NDUxYjYxZDMzZTQyMWYwODU4NTBhIiwidHlwIjoiSldUIn0.eyJuYmYiOjE1MzE4OTkzMjYsImV4cCI6MTUzMTkwMjkyNiwiaXNzIjoiaHR0cHM6Ly9pc2hhcmUtYXItcWEuYXp1cmV3ZWJzaXRlcy5uZXQiLCJhdWQiOlsiaHR0cHM6Ly9pc2hhcmUtYXItcWEuYXp1cmV3ZWJzaXRlcy5uZXQvcmVzb3VyY2VzIiwiaVNIQVJFIl0sImNsaWVudF9pZCI6IkVVLkVPUkkuTkwwMDAwMDAwMDMiLCJzY29wZSI6WyJpU0hBUkUiXX0.BcsCVW9sYLd1avAvkUJnli_Tc1ZHTs2X408so9_XmO7OyPxCwMbugwFMJJM6u5DWXEuVUmbC6PIgVc8GWhgomWaZ48IbvJHWyGqGnAGWhY7pZC246pY5cA_oWFtl03HzfEdYRfiugWjEjKvIvI0UoIbSkwXTzOKEuHzfDNnd87YgriTQR5Ep99LP8Vji6QC4q-1b8_uS6fAI1OeXXSUHB20DA8A0A3OkD4lcXK3Ke_oQnlZ-5DD_Mxd4J8OXARwJqipXcfD2CkjwTf6vUlu1AGJgDSINPju1I7YlJFekby2fKY8-ptl6J7p6h-TxH7rrZ75n8q39AKBoqGYT5yVY5A"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"delegationRequest\": {\n\t\t\"policyIssuer\": \"EU.EORI.NL000000003\",\n\t\t\"target\": {\n\t\t\t\"accessSubject\": \"EU.EORI.NL000000001\"\n\t\t},\n\t\t\"policySets\": [\n\t\t\t\n\t\t\t{\n\t\t\t\t\"policies\" : [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"target\": {\n\t\t\t\t\t\t\t\"resource\": {\n\t\t\t\t\t\t\t\t\"type\": \"CONTAINER.DATA\",\n\t\t\t\t\t\t\t\t\"identifiers\": [\"180621.ABC130\"],\n\t\t\t\t\t\t\t\t\"attributes\": [\"CONTAINER.DATA.ATTRIBUTE.ETA\"]\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t\"actions\": [\"ISHARE.READ\"]\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"rules\": [\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\"effect\": \"Permit\"\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t]\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t}\n}      "
+								},
+								"url": {
+									"raw": "{{ar}}/delegation",
+									"host": [
+										"{{ar}}"
+									],
+									"path": [
+										"delegation"
+									]
+								},
+								"description": "W13 delegates rights to ABC Trucking. W13 allows ABC READ access to the ETA of all of W13's containers."
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Content-Length",
+									"value": "0",
+									"name": "Content-Length",
+									"description": "The length of the response body in octets (8-bit bytes)"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 13 Jun 2018 12:52:32 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Server",
+									"value": "Kestrel",
+									"name": "Server",
+									"description": "A name for the server"
+								},
+								{
+									"key": "WWW-Authenticate",
+									"value": "Bearer",
+									"name": "WWW-Authenticate",
+									"description": "Indicates the authentication scheme that should be used to access the requested entity."
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "a66082cf-1c49-41b6-8708-303ab029b71f",
+				"type": "text/javascript",
+				"exec": [
+					"gl = { ",
+					"    arrayBufferToString: function (buffer){",
+					"        var arr = new Uint8Array(buffer);",
+					"        var str = String.fromCharCode.apply(String, arr);",
+					"        if(/[\\u0080-\\uffff]/.test(str)){",
+					"            throw new Error('this string seems to contain (still encoded) multibytes');",
+					"        }",
+					"        return str;",
+					"    },",
+					"    ",
+					"    createGenerateJwsRequest: function(iss, aud, x5c, privateKey) {",
+					"          console.log('Generate assertion for ' + JSON.stringify({",
+					"              iss: iss,",
+					"              aud: aud,",
+					"              x5c: x5c,",
+					"              privateKey: privateKey",
+					"          }));",
+					"          ",
+					"          var request =  {",
+					"                      url: pm.variables.get('so') + '/testing/generate-jws',",
+					"                      method: 'POST',",
+					"                      header: {",
+					"                          'alg': \"RS256\",",
+					"                          'typ': \"JWT\",",
+					"                          'iss': pm.variables.get(iss),",
+					"                          'aud': pm.variables.get(aud),",
+					"                          'x5c': pm.variables.get(x5c)",
+					"                      },",
+					"                      body: {",
+					"                        mode: 'raw',",
+					"                        raw: pm.variables.get(privateKey)",
+					"                      }",
+					"                };",
+					"         console.log('Request ' + JSON.stringify(request));",
+					"         return request;",
+					"    },",
+					"    ",
+					"    createConnectTokenRequest: function(base, clientId, clientAssertion) {",
+					"          console.log('Create token request ' + JSON.stringify({",
+					"              base: base, ",
+					"              clientId: clientId, ",
+					"              clientAssertion: clientAssertion",
+					"          }));",
+					"                return {",
+					"                      url: pm.variables.get(base) + '/connect/token',",
+					"                      method: 'POST',",
+					"\t\t\t\t\t  header: {",
+					"\t\t\t\t\t\t'Accept': 'application/json',",
+					"\t\t\t\t\t\t'Content-Type': 'application/x-www-form-urlencoded'",
+					"\t\t\t\t\t  },",
+					"                      body: {",
+					"                       mode: 'urlencoded',",
+					"\t\t\t\t\t   urlencoded: [",
+					"\t\t\t\t\t\t{key: 'grant_type', value: 'client_credentials'},",
+					"\t\t\t\t\t\t{key: 'scope', value: 'iSHARE'},\t",
+					"\t\t\t\t\t\t{key: 'client_assertion_type', value: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'},\t\t\t\t\t\t\t",
+					"\t\t\t\t\t\t{key: 'client_assertion', value: clientAssertion },",
+					"\t\t\t\t\t\t{key: 'client_id', value: pm.variables.get(clientId) },",
+					"\t\t\t\t\t   ]",
+					"                      }",
+					"                }",
+					"    },",
+					"    ",
+					"    createConnectTokenRequestSpa: function(base, scope, user, password) {",
+					"          console.log('Create token request ' + JSON.stringify({",
+					"              base: base, ",
+					"              user: user,",
+					"              scope: scope",
+					"          }));",
+					"                return {",
+					"                      url: pm.variables.get(base) + '/connect/token',",
+					"                      method: 'POST',",
+					"\t\t\t\t\t  header: {",
+					"\t\t\t\t\t\t'Accept': 'application/json',",
+					"\t\t\t\t\t\t'Content-Type': 'application/x-www-form-urlencoded'",
+					"\t\t\t\t\t  },",
+					"                      body: {",
+					"                       mode: 'urlencoded',",
+					"\t\t\t\t\t   urlencoded: [",
+					"\t\t\t\t\t\t{key: 'grant_type', value: 'password'},",
+					"\t\t\t\t\t\t{key: 'scope', value: scope},\t",
+					"\t\t\t\t\t\t{key: 'client_secret', value: 'secret'},\t",
+					"\t\t\t\t\t\t{key: 'client_id', value: 'spa' },",
+					"\t\t\t\t\t\t{key: 'username', value: pm.variables.get(user) },",
+					"\t\t\t\t\t\t{key: 'password', value: pm.variables.get(password) }",
+					"\t\t\t\t\t   ]",
+					"                      }",
+					"                }",
+					"    }",
+					"}",
+					"",
+					"postman.setGlobalVariable(\"getAccessToken\", (iss, aud, x5c, privateKey, url, handler) => { ",
+					"\t\t  ",
+					"           console.log('getAccessToken ' + JSON.stringify({",
+					"              iss: iss,",
+					"              aud: aud,",
+					"              privateKey: privateKey,",
+					"              x5c: x5c,",
+					"              url: url,",
+					"              handler: handler !== 'undefined' ? 'handler is provided' : 'handler is not provided'",
+					"          }));",
+					"          ",
+					"          ",
+					"\t      pm.sendRequest(gl.createGenerateJwsRequest(iss, aud, x5c, privateKey), function (err, response) {",
+					"\t            ",
+					"\t\t\t\tif (err === null && response != null && response.code == 200) {",
+					"    \t\t\t\tconst clientAssertion = gl.arrayBufferToString(response.stream);",
+					"    \t\t\t   ",
+					"    \t\t\t\tpm.sendRequest(gl.createConnectTokenRequest(url, iss, clientAssertion), function (err, response) {",
+					"    \t\t\t\t        if (err === null && response != null && response.code == 200) {",
+					"    \t\t\t\t            const accessToken = response.json().access_token;",
+					"    \t\t\t\t            handler(err, accessToken);",
+					"    \t\t\t\t        }",
+					"        \t\t\t\t\telse {",
+					"        \t\t\t\t\t    console.log('ERR!!! Access Token could not be retrieved. Error: ' + err);",
+					"        \t\t\t\t\t    handler(err, null);",
+					"        \t\t\t\t\t}",
+					"    \t\t\t\t});",
+					"\t\t\t\t} else {",
+					"\t\t\t\t    console.log('ERR!!! client_assertion could not be retrieved. Error: ' + err);",
+					"\t\t\t\t    handler(err, null);",
+					"\t\t\t\t}",
+					"\t\t\t});",
+					"",
+					"});",
+					"",
+					"postman.setGlobalVariable(\"getAccessTokenSpa\", (url, scope, user, password, handler) => { ",
+					"\t\t  ",
+					"           console.log('getAccessTokenSpa ' + JSON.stringify({",
+					"              url: url,",
+					"              user: user,",
+					"              handler: handler !== 'undefined' ? 'handler is provided' : 'handler is not provided'",
+					"          }));",
+					"          ",
+					"          ",
+					"\t     \tpm.sendRequest(gl.createConnectTokenRequestSpa(url, scope, user, password), function (err, response) {",
+					"    \t\t\t\t        if (err === null && response != null && response.code == 200) {",
+					"    \t\t\t\t            const accessToken = response.json().access_token;",
+					"    \t\t\t\t            handler(err, accessToken);",
+					"    \t\t\t\t        }",
+					"        \t\t\t\t\telse {",
+					"        \t\t\t\t\t    console.log('ERR!!! Access Token could not be retrieved for spa client. Error: ' + err);",
+					"        \t\t\t\t\t    handler(err, null);",
+					"        \t\t\t\t\t}",
+					"    \t\t\t\t});",
+					"",
+					"});",
+					"",
+					"postman.setGlobalVariable(\"getDelegationEvidence\", (delegationMask, iss, aud, x5c, privateKey, handler) => { ",
+					"\t\t  ",
+					"           console.log('getDelegationEvidence ' + JSON.stringify({",
+					"              delegationMask: JSON.stringify(delegationMask), ",
+					"              iss: iss,",
+					"              aud: aud,",
+					"              privateKey: privateKey,",
+					"              x5c: x5c,",
+					"              handler: handler !== 'undefined' ? 'handler is provided' : 'handler is not provided'",
+					"          }));",
+					"          ",
+					"          // get an access token from ar",
+					"          eval(globals.getAccessToken)(iss, aud, x5c, privateKey, 'ar', function(err, accessToken){",
+					"              if (err === null) {",
+					"                    const delegationRequest = {",
+					"                      url: pm.variables.get('ar') + '/delegation',",
+					"                      method: 'POST',",
+					"\t\t\t\t\t  header: {",
+					"\t\t\t\t\t\t'Authorization': 'Bearer ' + accessToken,",
+					"\t\t\t\t\t    'Content-Type': 'application/json'",
+					"\t\t\t\t\t  },",
+					"                      body: {",
+					"                       mode: 'raw',",
+					"\t\t\t\t\t   raw: JSON.stringify(delegationMask)",
+					"                      }",
+					"                    };",
+					"    \t\t\t\tpm.sendRequest(delegationRequest, function(err, response) {",
+					"    \t\t\t\t    if (err === null && response != null && response.code == 200) {",
+					"    \t\t\t\t        const delegationToken = response.json().delegation_token;",
+					"    \t\t\t\t        handler(err, delegationToken);",
+					"    \t\t\t\t    } else {",
+					"    \t\t\t\t        console.log('ERR!!! delegation_evidence could not be retrieved. Error: ' + err);",
+					"    \t\t\t\t        handler(err, null);",
+					"    \t\t\t\t    }",
+					"    \t\t\t\t});",
+					"              }",
+					"          });",
+					"});",
+					"",
+					"postman.setGlobalVariable('authorizeContainers', (delegationMask, iss, aud, x5c, privateKey, url) => {",
+					"    eval(globals.getAccessToken)(iss, aud, x5c, privateKey, url, function(err, accessToken){",
+					"        ",
+					"        if (accessToken != null)",
+					"        {",
+					"            pm.variables.set('access_token', accessToken); ",
+					"            ",
+					"            eval(globals.getDelegationEvidence)(delegationMask, iss, 'ar.client_id', x5c, privateKey, function(err, response){",
+					"                    ",
+					"                    var delegationEvidence = response || \"no valid delegation evidence\";",
+					"                    ",
+					"                    pm.variables.set('delegation_evidence', delegationEvidence);",
+					"                }",
+					"            );",
+					"        }",
+					"    }",
+					"  );",
+					"});",
+					"",
+					"postman.setGlobalVariable('authorize', (iss, aud, x5c, privateKey, url) => {",
+					"    eval(globals.getAccessToken)(iss, aud, x5c, privateKey, url, function(err, accessToken){",
+					"        ",
+					"        if (accessToken != null)",
+					"        {",
+					"            pm.variables.set('access_token', accessToken); ",
+					"        }",
+					"    }",
+					"  );",
+					"});",
+					"",
+					"postman.setGlobalVariable('authorizeSpa', (url, scope, user, password) => {",
+					"    eval(globals.getAccessTokenSpa)(url, scope, user, password, function(err, accessToken){",
+					"        ",
+					"        if (accessToken != null)",
+					"        {",
+					"            pm.variables.set('access_token', accessToken); ",
+					"        }",
+					"    }",
+					"  );",
+					"});",
+					"",
+					"postman.setGlobalVariable('generateJwsToken', (iss, aud, x5c, privateKey) => {",
+					"    pm.sendRequest(gl.createGenerateJwsRequest(iss, aud, x5c, privateKey), function (err, response) {",
+					"\t\t\t\tif (err === null && response != null && response.code == 200) {",
+					"    \t\t\t\tconst clientAssertion = gl.arrayBufferToString(response.stream);",
+					"    \t\t\t   ",
+					"    \t\t\t\tpm.variables.set('client_assertion', clientAssertion);",
+					"\t\t\t\t} else {",
+					"\t\t\t\t    console.log('ERR!!! client_assertion could not be retrieved. Error: ' + err);",
+					"\t\t\t\t    handler(err, null);",
+					"\t\t\t\t}",
+					"\t\t\t});",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "ba33b626-95f3-45dc-ab67-2fb6ecf6e5dc",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

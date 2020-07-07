@@ -24,7 +24,7 @@ Headers
 
 ``Content-Type``
     | **String**.
-    | Defines request body content type. MUST be equal to *application/json*.
+    | Defines request body content type. MUST be *application/json*. It can also contain characters encoding format like *charset=UTF-8*. 
 
 Parameters
 ~~~~~~~~~~
@@ -39,7 +39,7 @@ Example
 ::
 
     > Authorization: Bearer IIeDIrdnYo2ngwDQYJKoZIhvcNAQELBQAwSDEZMBcGA1UEAwwQaVNIQ
-    < Content-Type: application/json
+    < Content-Type: application/json; charset=UTF-8
 
     POST connect/userinfo
 

@@ -30,7 +30,7 @@
 						"id": "428b4bee-32ef-4f5b-a912-40edc6a0de3e",
 						"exec": [
 							"var w13TokenResponse = JSON.parse(responseBody);",
-							"pm.globals.set(\"w13.accesstoken.testcollection\", w13TokenResponse.access_token);"
+							"pm.globals.set(\"w13.accesstoken.containerdata\", w13TokenResponse.access_token);"
 						],
 						"type": "text/javascript"
 					}
@@ -98,7 +98,7 @@
 						"description": "Contains Bearer + received access token (without access token only public services are returned)",
 						"key": "Authorization",
 						"type": "text",
-						"value": "Bearer {{w13.accesstoken.testcollection}}"
+						"value": "Bearer {{w13.accesstoken.containerdata}}"
 					},
 					{
 						"description": "Requests that response is not signed, default is signed. Only for test, not allowed for Production.",
@@ -393,7 +393,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{w13.accesstoken.testcollection}}",
+						"value": "Bearer {{w13.accesstoken.containerdata}}",
 						"description": "contains \"Bearer\" + access token value"
 					}
 				],
@@ -426,7 +426,7 @@
 					{
 						"description": "contains \"Bearer\" + access token value",
 						"key": "Authorization",
-						"value": "Bearer {{w13.accesstoken.testcollection}}"
+						"value": "Bearer {{w13.accesstoken.containerdata}}"
 					},
 					{
 						"description": "Optional boolean to indicate response SHALL not be signed, default is signed response",

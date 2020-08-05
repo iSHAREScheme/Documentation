@@ -35,7 +35,9 @@ Parameters
 
 ``scope``
     | **String**.
-    | OAuth 2.0 scope for OpenID Connect 1.0. MUST contain the *openid* and *iSHARE* scope values and MAY contain one or more scopes identifying the attributes from the Human Service Consumer that are requested. Scope values determine the permissions to be asked to the user. MUST be identical to the scope value in the ``request`` parameter. According to `RFC 6749 <https://tools.ietf.org/html/rfc6749>`_, scopes are case-sensitive. 
+    | OAuth 2.0 scope for OpenID Connect 1.0. MUST contain the *openid* and *iSHARE* scope values and MAY contain one or more scopes identifying the attributes from the Human Service Consumer that are requested. Scope values determine the permissions to be asked to the user. MUST be identical to the scope value in the ``request`` parameter.
+
+.. note:: According to `RFC 6749 <https://tools.ietf.org/html/rfc6749>`_, scopes are case-sensitive. 
 
 .. _refAuthorizeRequestObject:
 

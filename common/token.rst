@@ -29,7 +29,7 @@ Parameters
 
 ``scope``
     | **String**. *Optional*.
-    | OAuth 2.0 scope. Defaults to *iSHARE* if not provided, indicating all rights of the Service Consumer are requested. Other values allow the Service Consumer to get tokens that do not include all rights the Service Consumer has.
+    | OAuth 2.0 scope. Defaults to *iSHARE* if not provided, indicating all rights of the Service Consumer are requested. Other values allow the Service Consumer to get tokens that do not include all rights the Service Consumer has. According to `RFC 6749 <https://tools.ietf.org/html/rfc6749>`_, scopes are case-sensitive. 
 
 ``client_id``
     | **String**.

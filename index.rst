@@ -88,3 +88,9 @@ In order to start the development please read everything until you reach :ref:`G
    identity-provider/login
    identity-provider/token
    identity-provider/userinfo
+   
+.. toctree::
+   :hidden:
+   :caption: UI Guidelines
+   
+   ui-guidelines/sign-in

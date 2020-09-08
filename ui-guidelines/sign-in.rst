@@ -10,7 +10,7 @@ Follow these guidelines for iSHARE sign-in button
 iSHARE logo
 -----------
 
-The below URL should be used for the visual asset of the button. This allows us to approximate anonymized the usage statistics of the logo.
+The below URL should be used for the visual asset of the button. This allows us to approximate anonymized usage statistics of the logo.
 
 `https://so.ishareworks.org/isharelogo.svg <https://so.ishareworks.org/isharelogo.svg>`_
 

@@ -7,7 +7,14 @@ Follow these guidelines for iSHARE sign-in button
 
 .. image:: signin.png
 
-SVG files are available to download:
+iSHARE logo
+-----------
+
+The below URL should be used for the visual asset of the button. This allows us to approximate anonymized the usage statistics of the logo.
+
+`https://so.ishareworks.org/isharelogo.svg <https://so.ishareworks.org/isharelogo.svg>`_
+
+Also, you can use iSHARE SVG files that are available for download:
 
 * :download:`Only logo <resources/ishare only logo.svg>`
 * :download:`Logo with iSHARE at the bottom <resources/ishare logo bottom.svg>`

@@ -42,8 +42,8 @@ Parameters
 .. _refAuthorizeRequestObject:
 
 ``request``
-    | **String (JWE)**.
-    | OpenID Connect 1.0 signed and encrypted JWT (a.k.a. :ref:`JWE<refJWE>`) containing all request parameters. Look into :ref:`section below<refAuthorizeJwtContents>` to understand request parameter contents. See also :ref:`Generic iSHARE JWT specifications<refJWT>` for a.o. basic content and signing requirements.
+    | **String (JWT)**.
+    | OpenID Connect 1.0 signed JWT containing all request parameters. Look into :ref:`section below<refAuthorizeJwtContents>` to understand request parameter contents. See also :ref:`Generic iSHARE JWT specifications<refJWT>` for a.o. basic content and signing requirements.
 
 .. _refAuthorizeJwtContents:
 

@@ -29,10 +29,6 @@ Headers
 Parameters
 ~~~~~~~~~~
 
-``request``
-    | **Object**.
-    | **TBD**
-
 Example
 ~~~~~~~
 
@@ -42,10 +38,6 @@ Example
     < Content-Type: application/json; charset=UTF-8
 
     POST connect/userinfo
-
-    {
-      "request": "no example yet"
-    }
 
 Response
 --------

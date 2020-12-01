@@ -64,26 +64,26 @@ HTTP status codes
 Parameters
 ~~~~~~~~~~
 
-Since response ``Content-Type`` is *application/jwt* it should be expected to retrieve a signed JWT. JWT should be :ref:`iSHARE compliant<refJWTPayload>` and its payload should contain :ref:`delegation evidence<refDelegationEvidence>`. In addition, JWT payload also contains the following parameters:
+Since response ``Content-Type`` is *application/jwt* it should be expected to retrieve a signed JWT. JWT should be :ref:`iSHARE compliant<refJWTPayload>` and its payload should contain :ref:`delegation evidence<refDelegationEvidence>`. In addition, JWT payload might also contain the following parameters:
 
 ``first_name``
-    | **String**.
+    | **String**. *Optional*.
     | First name of the human who's access token is used.
 
 ``last_name``
-    | **String**.
+    | **String**. *Optional*.
     | Last name of the human who's access token is used.
 
 ``gender``
-    | **String**.
+    | **String**. *Optional*.
     | Gender of the human who's access token is used. Available values are *male*, *female*, **TBD**.
 
 ``company_id``
-    | **String**.
+    | **String**. *Optional*.
     | **TBD**.
 
 ``company_name``
-    | **String**.
+    | **String**. *Optional*
     | **TBD**.
 
 200 OK Example

@@ -3,8 +3,6 @@
 UserInfo
 ========
 
-.. error:: Incomplete. UserInfo endpoint soon is going to be changed, so there's no point of finishing this section.
-
 OpenID Connect 1.0 endpoint for obtaining attributes of a Human Service Consumer conform scope defined in access token.
 
 Request

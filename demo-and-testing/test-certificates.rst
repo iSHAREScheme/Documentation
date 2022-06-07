@@ -12,7 +12,7 @@ In order to get an iSHARE Test certificate, the iSHARE organization needs to hav
 * Your company country
 * Your company EORI number (used as iSHARE identifier)
 
-Please provide the details to tooling@ishareworks.org , you will then be contacted by our support staff when your test certificate has been created and your company has been added to the test participants database.
+`Click here <https://ca7.isharetest.net:8442/ejbca/ra/index.xhtml>` to request your test certificate directly.
 
 .. note:: Please note that test certificates should ONLY be used for testing purposes and to communicate test data. They are not reliable enough to be used for authentication outside of the test network, nor were they designed and distributed for that purpose. The iSHARE organisation provides the test certificates without warranty of any kind, and shall in no event or case be liable for any damage or liability in connection with the use of the test certificates.
 

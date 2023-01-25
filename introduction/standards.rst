@@ -88,7 +88,7 @@ A JWT is used in iSHARE when exchanging claims between parties. These claims are
 OAuth 2.0
 ---------
 
-OAuth is a widely used security standard that enables secure access to protected resources in a fashion that is friendly to web APIs. It is a delegation protocol that provides authorization across systems. OAuth is about *how to get a token* and *how to use a token*. OAuth replaces the password-sharing antipattern with a deleagtion protocol that's simultaneosly more secure and more usable. OAuth focused on solving a small set of problems and solving them well, whch makes it a suitable component within larger security systems.
+OAuth is a widely used security standard that enables secure access to protected resources in a fashion that is friendly to web APIs. It is a delegation protocol that provides authorization across systems. OAuth is about *how to get a token* and *how to use a token*. OAuth replaces the password-sharing antipattern with a deleagtion protocol that's simultaneosly more secure and more usable. OAuth focused on solving a small set of problems and solving them well, which makes it a suitable component within larger security systems.
 
 iSHARE uses the OAuth 2.0 protocol for authenticating parties and providing access tokens when requesting access to a service within iSHARE. For the most recent version of the OAuth 2.0 specification visit `oauth.net <https://oauth.net/2/>`_.
 

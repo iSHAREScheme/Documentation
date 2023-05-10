@@ -52,7 +52,7 @@ Example
 
     > Content-Type: application/x-www-form-urlencoded
 
-    POST connect/token
+    POST /connect/token
 
     grant_type=client_credentials&
     scope=iSHARE&

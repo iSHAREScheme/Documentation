@@ -42,7 +42,7 @@ Example
 
     > Content-Type: application/x-www-form-urlencoded
 
-    POST login
+    POST /login
 
     username=keeper&
     password=P4$$w0rD!

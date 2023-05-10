@@ -54,7 +54,7 @@ Example
 
     > Content-Type: application/x-www-form-urlencoded
 
-    POST connect/token
+    POST /connect/token
 
     grant_type=authorization_code&
     client_id=EU.EORI.NL000000001&

@@ -21,8 +21,6 @@ In order to start the development please read everything until you reach :ref:`G
 
    introduction/getting-started
    introduction/help
-   introduction/help
-
 
 .. toctree::
    :hidden:
@@ -61,10 +59,7 @@ In order to start the development please read everything until you reach :ref:`G
    satellite/versions.rst
    common/capabilities
    satellite/dataspaces
-   .. m2m/authentication
-   .. m2m/authorization
    
-
 .. toctree::
    :hidden:
    :caption: Authorisation Registry Role

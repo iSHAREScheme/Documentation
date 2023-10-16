@@ -8,7 +8,7 @@ This is an abstract service (business specific) endpoint to show how any Service
 Request
 -------
 
-Request can make use of any HTTP method and can contain any extra headers. Parameters are undefined because they vary for each Service Provider due to their business specific logic.
+Request can make use of any HTTP method and can contain any extra headers. Parameters are undefined because they vary for each Service Provider due to their business specific logic. Note: Additional headers for security, statefulnes, application functionality could be added and is out of scope of this specification.  
 
 Headers
 ~~~~~~~

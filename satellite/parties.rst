@@ -3,7 +3,7 @@
 Parties
 =======
 
-Used to obtain information about iSHARE participants from the iSHARE Satellite. Should be used to verify the status of an iSHARE participants. Returns 10 records per page. Furthermore offers limited search functionality through optional parameters, at least one optional parameter is required.
+Used to obtain information about iSHARE participants from the iSHARE Scheme owner. Should be used to verify the status of an iSHARE participants. Returns 10 records per page. Furthermore offers limited search functionality through optional parameters, at least one optional parameter is required.
 
 Request
 -------
@@ -49,91 +49,7 @@ Parameters
 
 ``date_time``
     | **String (ISO 8601)**. *Optional*.
-    | Search parties with specific adherence date
-
-``adherenceStatus``
-    | **String** *Optional*
-    | Search for parties with adherence status like "Active", "Revoked","Not Active", "Pending"
-
-``adherenceStartdate``
-    | **String (ISO 8601)**. *Optional*.
-    | Search parties with specific adherence start date
-
-``adherenceEnddate``
-    | **String (ISO 8601)**. *Optional*.
-    | Search parties with specific adherence end date
-
-``registarSatelliteID``
-    | **String**. *Optional*.
-    | Search parties by their registrar satellite's ID (EORI) number
-
-``webSiteUrl``
-    | **String**. *Optional*.
-    | Search a party by their website URL
-
-``companyEmail``
-    | **String**. *Optional*.
-    | Search a party by their email ID
-
-``companyPhone``
-    | **Integer**. *Optional*.
-    | Search a party by their company phone number
-
-``publiclyPublishable``
-    | **Boolean**. *Optional*.
-    | Search parties whose general company contact information is allowed to be published
-
-``tags``
-    | **String**. *Optional*.
-    | Search parties who match any of the keywords that they have added in their participant information under tags. It is a free text field and can contain any value
-
-``framework``
-    | **String**. *Optional*.
-    | Search parties based on which framework they were onboarded with. Currently parties can only be registered with "iSHARE" framework
-
-``subjectName``
-    | **String**. *Optional*.
-    | Search parties based on the subject name of their PKI (x509) certificates. Usually to find a party who is requesting tokens
-
-``role``
-    | **String**. *Optional*.
-    | Search parties based on their roles as defined in iSHARE role framework. Possible roles are Service Consumer/Service Provider/Entitled Party/Authorisation Registry/Identity Provider/Identity Broker/iSHARE Satellite
-
-``loA``
-    | **String**. *Optional*.
-    | Search parties based on their level of assurance which is registered in the participant list. Possible values are Low/Substantial/High
-
-``compliancyVerified``
-    | **String**. *Optional*.
-    | Search parties that have their compliance to framework verified or not.
-
-``legalAdherence``
-    | **String**. *Optional*.
-    | Search parties that have signed the appropriate legal agreements and that have been verified during or after onboarding. Parties adhering to legal agreements are legally obliged to adhere to terms of use of data.
-
-``authorizationRegistryID``
-    | **String**. *Optional*.
-    | Search parties based on their authorisation registry provider. The ID (EORI) of the authorisation registry must be provided in search parameter and this must be listed as authorisation registry in the participant record
-
-``authorizationRegistryName``
-    | **String**. *Optional*.
-    | Search parties based on their authorisation registry provider. The name of the authorisation registry must be provided in search parameter and this must be listed as authorisation registry in the participant record
-
-``dataSpaceID``
-    | **String**. *Optional*.
-    | Search parties based on data-spaces they participate in. The ID of the data-space must be provided
-
-``dataSpaceTitle``
-    | **String**. *Optional*.
-    | Search parties based on data-spaces they participate in. The name of the data-space must be provided
-
-``countriesOfOperation``
-    | **String**. *Optional*.
-    | Search parties by name of country they list as their country of operation
-
-``sectorIndustry``
-    | **String**. *Optional*.
-    | Search parties by name of sector they list as their sector/industry
+    | Date time for which the information is requested. If provided the result becomes final and therefore MUST be cacheable.
 
 .. note:: Even though all parameters are optional, at least one parameter should be provided. E.x. if you would like to retrieve all parties, you could use ``name=*`` or ``eori=*``.
 
@@ -213,96 +129,32 @@ Decoded JWT Payload
 .. code-block:: json
 
     {
-        "parties_token": {
-            "iss": "EU.EORI.NL123456789",
-            "sub": "EU.EORI.NL123456789",
-            "aud": "EU.EORI.NL123456789",
-            "jti": "378a47c4-2822-4ca5-a49a-7e5a1cc7ea59",
-            "exp": 1504684475,
-            "iat": 1504683475,
-            "parties_info": {
-            "count": 0,
-            "data": [
-                {
-                "party_id": "EU.EORI.US000000005",
-                "party_name": "Example Corporation",
-                "capability_url": "https://www.example.com/capabilities",
-                "registrar_id": "EU.EORI.NL123456789",
-                "adherence": {
-                    "status": "Active",
-                    "start_date": "2023-01-31T00:00:00.000Z",
-                    "end_date": "2024-02-01T00:00:00.000Z"
-                },
-                "additional_info": {
-                    "description": "Example is a corporation providing example services to its customers in example regions",
-                    "logo": "https://www.example.com/logo.png",
-                    "website": "https://www.example.com/",
-                    "company_phone": "string",
-                    "company_email": "John.doe@example.com",
-                    "publicly_publishable": false,
-                    "countries_operation": [],
-                    "sector_industry": [],
-                    "tags": "mobility transport_operator"
-                },
-                "agreements": [
-                    {
-                    "type": "TermsOfUse",
-                    "title": "TOU",
-                    "status": "Accepted",
-                    "sign_date": "2023-01-31T00:00:00.000Z",
-                    "expiry_date": "2024-01-31T00:00:00.000Z",
-                    "hash_file": "614331b0003219f2d2d123b0cd6105fb",
-                    "framework": "iSHARE",
-                    "dataspace_id": "",
-                    "dataspace_title": "",
-                    "complaiancy_verified": "yes"
-                    },
-                    {
-                    "type": "AccessionAgreement",
-                    "title": "AA",
-                    "status": "Accepted",
-                    "sign_date": "2023-01-31T00:00:00.000Z",
-                    "expiry_date": "2024-01-31T00:00:00.000Z",
-                    "hash_file": "f50a036402b3b243910ce572930be9f5",
-                    "framework": "iSHARE",
-                    "dataspace_id": "",
-                    "dataspace_title": "",
-                    "complaiancy_verified": "yes"
-                    }
-                ],
-                "certificates": [
-                    {
-                    "subject_name": "SERIALNUMBER=EU.EORI.US000000005,CN=CFMInternational,O=CFM International,C=US",
-                    "certificate_type": "Pkio",
-                    "enabled_from": "2023-01-31T00:00:00.000Z",
-                    "x5c": "",
-                    "x5t#s256": ""
-                    }
-                ],
-                "spor": {
-                    "signed_request": "f1aec63b5b6f545718dc1c86efda3a9e8d8c74c4c2af42b39d9e8d41f3fc2b4e"
-                },
-                "roles": [
-                    {
-                    "role": "ServiceConsumer",
-                    "start_date": "2023-01-31T00:00:00.000Z",
-                    "end_date": "2024-01-31T00:00:00.000Z",
-                    "loa": "High",
-                    "compliancy_verified": true,
-                    "legal_adherence": true
-                    }
-                ],
-                "auth_registries": [
-                    {
-                    "name": "iSHARE Test Authorization Registry",
-                    "id": "EU.EORI.NL000000004",
-                    "url": "http://ar.isharetest.net/",
-                    "dataspace_id": "ContaktDS1",
-                    "dataspace_name": "ContaktDS1"
-                    }
-                ]
-                }
+      "iss": "EU.EORI.NL000000000",
+      "sub": "EU.EORI.NL000000000",
+      "jti": "0868904d8ed94c01a0a4d6dd5c65ce9e",
+      "iat": 1591965905,
+      "exp": 1591965935,
+      "aud": "EU.EORI.NL000000001",
+      "parties_info": {
+        "count": 1,
+        "data": [
+          {
+            "party_id": "EU.EORI.NL000000004",
+            "party_name": "AskMeAnything Authorization Registry",
+            "adherence": {
+              "status": "Active",
+              "start_date": "2018-04-26T14:59:14Z",
+              "end_date": "2020-07-25T14:59:14Z"
+            },
+            "certifications": [
+              {
+                "role": "AuthorisationRegistry",
+                "start_date": "2018-01-04T00:00:00Z",
+                "end_date": "2020-02-02T00:00:00Z",
+                "loa": 3
+              }
             ]
-            }
-        }
+          }
+        ]
+      }
     }

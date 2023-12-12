@@ -360,20 +360,3 @@ Decoded JWT Payload
     }
   }
  }
-
-Extensions
-~~~~~~~
-
-``x-operation-settings``
-    | **String**.
-    | {"CollectParameters":false,"AllowDynamicQueryParameters":false,"AllowDynamicFormParameters":false,"IsMultiContentStreaming":false,"ErrorTemplates":
-    | {},"SkipAdditionalHeaders":false}
-
-``x-unitTests``
-    | **String**.
-    | [{"request":{"method":"GET","uri":"/parties?active_only=true&name=ABC%20Corporation%0AABC%2A%0A%2ACorporation&eori=EU.EORI.NL123456789%0AEU.EORI.NL%2A%0A%2A123456789&certified_only=true&date_time=2023-01-31T00%3A00%3A00.000Z&adherenceStatus=%22Active%22%0A%22Revoked%22%0A%22Not%20Active%22%0A%22Pending%22&adherenceStartdate=2023-01-31T00%3A00%3A00.000Z&adherenceEnddate=2023-01-31T00%3A00%3A00.000Z&registarSatelliteID=EU.EORI.NL012345678&webSiteUrl=https%3A%2F%2Fwww.example.com&companyEmail=John.doe%40example.com&publiclyPublishable=true&tags=mobility&framework=iSHARE&subjectName=%22SERIALNUMBER%3DEU.EORI.US000000005%2CCN%3DCFMInternational%2CO%3DCFM%20International%2CC%3DUS%22&role=Service%20Consumer%0AService%20Provider%0AEntitled%20Party%0AAuthorisation%20Registry%0AIdentity%20Provider%0AIdentity%20Broker%0AiSHARE%20Satellite&loA=Low%0ASubstantial%0AHigh&compliancyVerified=true&legalAdherence=true&authorizationRegistryID=EU.EORI.NL000000004&authorizationRegistryName=%22Askme%20anything%22&dataSpaceID=EU.DSP.NLLOGISTICS_DLDS&dataSpaceTitle=%22Dutch%20Mobility%20Dataspace%22&countriesOfOperation=Belgium&sectorIndustry=Energy&page=2&certificate_subject_name=%22SERIALNUMBER%3DEU.EORI.US000000005%2CCN%3DCFMInternational%2CO%3DCFM%20International%2CC%3DUS%22"},"expectedResponse":{"x-allowExtraHeaders":true,"x-bodyMatchMode":"NONE","x-arrayOrderedMatching":false,"x-arrayCheckCount":false,"x-matchResponseSchema":true,"statusCode":"200","headers":{"Content-Type":"application/json"}},"x-testShouldPass":true,"x-testEnabled":true,"x-testName":"Test /parties","x-testDescription":"Search for participant information from your satellite. Various search parameters are supported as shown below. When results are more then 10 participants, pagination is used in response and each page contains up to 10 participants"}]
-
-
-
-
-

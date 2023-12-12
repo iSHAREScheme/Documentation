@@ -1,7 +1,7 @@
 Versions
 ========
 
-This endpoint can be used to retrieve the information about current and future API version status. Previous versions that are no longer supported won't be returned.
+Retrieves active and planned versions of iSHARE. By default returns current state. Server response is an iSHARE signed JSON Web Token.
 
 Request
 -------
@@ -73,7 +73,7 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`. In addition to th
         | **Timestamp (ISO 8601)**. Contained in the object of ``versions_info``.
         | UTC timestamp which states till when version is valid.
 
-    ``status``
+    ``version_status``
         | **String**. Contained in the object of ``versions_info``.
         | Status of the version. Available values are *active* and *planned*.
 

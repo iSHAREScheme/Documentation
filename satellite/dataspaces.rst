@@ -61,17 +61,17 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`. In addition to th
 
 ``dataspace_info``
     | **Array of Objects**. Root level.
-    | Contains collection of dataspaces.
+    | Contains results counts and information about dataspaces.
 
     ``total_count``
         | **String**. Contained in the object of ``dataspace_info``.
-        | Certificate authority subject name.
+        | Total count of found dataspaces.
     ``pageCount``
         | **String**. Contained in the object of ``dataspace_info``.
-        | Certificate authority subject name.
+        | Number of pages (10 per page).
     ``count``
         | **String**. Contained in the object of ``dataspace_info``.
-        | Certificate authority subject name.
+        | Number of dataspaces returned.
 
     ``data``
         | **Array of Objects**. Contained in the object of ``dataspace_list_token``.

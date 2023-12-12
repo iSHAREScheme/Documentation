@@ -94,7 +94,7 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`. In addition to th
                 | Free text field for addting relevant tags that are relevant in the context of datasapce. It useful for searching for specific dataspaces based on tags.
             ``status``
                 | **String**. Contained in the object of ``data``.
-                | Status of the dataspace. Available values are *new*, *in progress*, *active and *not active*.
+                | Status of the dataspace. Available values are *new*, *in progress*, *active* and *not active*.
             ``country_reg``
                 | **String**. Contained in the object of ``data``.
                 | Country in which the dataspace is registered in.

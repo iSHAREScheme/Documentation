@@ -75,7 +75,7 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`. In addition to th
 
     ``data``
         | **Array of Objects**. Contained in the object of ``dataspace_list_token``.
-        | Certificate authority subject name.
+        | Array containing a collection of data space objects.
 
             ``dataspace_title``
                 | **String**. Contained in the object of ``data``.
@@ -97,13 +97,13 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`. In addition to th
                 | Status of the dataspace. Possible statuses are 
             ``country_reg``
                 | **String**. Contained in the object of ``data``.
-                | Certificate authority subject name.
+                | Country in which the dataspace is registered in.
             ``countries_operation``
-                | **String**. Contained in the object of ``data``.
-                | Certificate authority subject name.
+                | **Array**. Contained in the object of ``data``.
+                | Array of country names in which the dataspace operates.
             ``sectors``
                 | **String**. Contained in the object of ``data``.
-                | Certificate authority subject name.
+                | Array of sector names in which the dataspace operates.
 
     ``certificate_fingerprint``
         | **String**. Contained in the object of ``trusted_list``.

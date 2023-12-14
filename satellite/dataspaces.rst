@@ -27,7 +27,7 @@ Example
 
     > Authorization: Bearer IIeDIrdnYo2ngwDQYJKoZIhvcNAQELBQAwSDEZMBcGA1UEAwwQaVNIQ
 
-    GET /trusted_list
+    GET /dataspaces
 
 Response
 --------
@@ -61,21 +61,21 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`. In addition to th
 
 ``dataspace_info``
     | **Array of Objects**. Root level.
-    | Contains collection of dataspaces.
+    | Contains results counts and information about dataspaces.
 
     ``total_count``
         | **String**. Contained in the object of ``dataspace_info``.
-        | Certificate authority subject name.
+        | Total count of found dataspaces.
     ``pageCount``
         | **String**. Contained in the object of ``dataspace_info``.
-        | Certificate authority subject name.
+        | Number of pages (10 per page).
     ``count``
         | **String**. Contained in the object of ``dataspace_info``.
-        | Certificate authority subject name.
+        | Number of dataspaces returned.
 
     ``data``
         | **Array of Objects**. Contained in the object of ``dataspace_list_token``.
-        | Certificate authority subject name.
+        | Array containing a collection of data space objects.
 
             ``dataspace_title``
                 | **String**. Contained in the object of ``data``.
@@ -94,16 +94,16 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`. In addition to th
                 | Free text field for addting relevant tags that are relevant in the context of datasapce. It useful for searching for specific dataspaces based on tags.
             ``status``
                 | **String**. Contained in the object of ``data``.
-                | Status of the dataspace. Possible statuses are 
+                | Status of the dataspace. Available values are *new*, *in progress*, *active* and *not active*.
             ``country_reg``
                 | **String**. Contained in the object of ``data``.
-                | Certificate authority subject name.
+                | Country in which the dataspace is registered in.
             ``countries_operation``
-                | **String**. Contained in the object of ``data``.
-                | Certificate authority subject name.
+                | **Array**. Contained in the object of ``data``.
+                | Array of country names in which the dataspace operates.
             ``sectors``
-                | **String**. Contained in the object of ``data``.
-                | Certificate authority subject name.
+                | **Array**. Contained in the object of ``data``.
+                | Array of sector names in which the dataspace operates.
 
     ``certificate_fingerprint``
         | **String**. Contained in the object of ``trusted_list``.

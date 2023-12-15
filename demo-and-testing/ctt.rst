@@ -27,7 +27,7 @@ The API services that need to conform to iSHARE standards differ per party role 
 
 **Service Consumers**
 
-* The Service Consumer does not necessarily host API services. The only requirement is to be able to get a valid access token from the Scheme Owner.
+* The Service Consumer does not necessarily host API services. The only requirement is to be able to get a valid access token from the iSHARE Satellite.
 
 **Service Providers**
 
@@ -122,6 +122,6 @@ After verifying compatibility:
 
 * Apply for eIDAS/PKI-Overheid Server certificate with an authorized Certificate Authority (Service Provider). Please note that application may take some time.
 * Install certificate on your server
-* Register certificate with iSHARE Scheme Owner
+* Register certificate with iSHARE Satellite
 * Sign Accession Agreement
 * For Certified Roles: provide signed Assessment Framework for Certified Parties

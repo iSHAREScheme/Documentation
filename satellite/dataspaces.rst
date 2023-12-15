@@ -64,13 +64,13 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`. In addition to th
     | Contains results counts and information about dataspaces.
 
     ``total_count``
-        | **String**. Contained in the object of ``dataspace_info``.
+        | **Integer**. Contained in the object of ``dataspace_info``.
         | Total count of found dataspaces.
     ``pageCount``
-        | **String**. Contained in the object of ``dataspace_info``.
+        | **Integer**. Contained in the object of ``dataspace_info``.
         | Number of pages (10 per page).
     ``count``
-        | **String**. Contained in the object of ``dataspace_info``.
+        | **Integer**. Contained in the object of ``dataspace_info``.
         | Number of dataspaces returned.
 
     ``data``

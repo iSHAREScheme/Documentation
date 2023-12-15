@@ -3,7 +3,7 @@
 Parties
 =======
 
-Used to obtain information about iSHARE participants from the iSHARE Scheme owner. Should be used to verify the status of an iSHARE participants. Returns 10 records per page. Furthermore offers limited search functionality through optional parameters, at least one optional parameter is required.
+Used to obtain information about iSHARE participants from the iSHARE Satellite. Should be used to verify the status of an iSHARE participants. Returns 10 records per page. Furthermore offers limited search functionality through optional parameters, at least one optional parameter is required.
 
 Request
 -------

@@ -78,7 +78,7 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`, however if an acc
 
         ``role``
             | **String**. Contained in ``ishare_roles``.
-            | Should be on the following values: *Authorization Registry*, *Scheme Owner*, *Service Provider*.
+            | Should be on the following values: *Service Consumer*, *Service Provider*, *Entitled Party*, *Authorisation Registry*, *Identity Provider*, *Identity Broker*, *iSHARE Satellite*.
 
     ``supported_versions``
         | **Array of Objects**. Contained in ``capabilities_info``.

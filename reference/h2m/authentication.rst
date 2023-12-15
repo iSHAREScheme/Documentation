@@ -26,5 +26,5 @@ The sequence diagram shows how the Service Provider interacts with an Identity P
 A few remarks regarding this flow:
 
 * Human user might interact with Service Provider in a different way than using a web browser.
-* After the Service Provider initiates a POST /token request, the Identity Provider can verify their iSHARE Adherence with the Scheme Owner. Adherence checks or certificate validation is not displayed in this flow as this flow only describes the generic OpenID Connect 1.0 flow
+* After the Service Provider initiates a POST /token request, the Identity Provider can verify their iSHARE Adherence with the iSHARE Satellite. Adherence checks or certificate validation is not displayed in this flow as this flow only describes the generic OpenID Connect 1.0 flow
 * This flow only describes Identification & Authentication of a human user, while in iSHARE it is always relevant that their Authorization (acting on behalf of an organization) is also verified. This process is described in the :ref:`Human Authorization section<refH2MAuthorization>`.

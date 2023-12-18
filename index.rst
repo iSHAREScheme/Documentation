@@ -31,8 +31,6 @@ In order to start the development please read everything until you reach :ref:`G
    reference/videos
    reference/m2m/authentication
    reference/m2m/authorization
-   reference/h2m/authentication
-   reference/h2m/authorization
 
 .. toctree::
    :hidden:

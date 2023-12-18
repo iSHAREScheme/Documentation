@@ -21,11 +21,11 @@ Generic Authentication Flow
 
 Based on the described standards and specifications in this scheme, the generic iSHARE Authentication flow is described in the following sequence diagram.
 
-For a deeper understanding of the various roles within the iSHARE Trust network, take a look at the `framework and roles page <https://ishareworks.atlassian.net/wiki/spaces/IS/pages/70221987/Framework+and+roles>`_ in the official iSHARE Scheme of agreements.
+For a deeper understanding of the various roles within the iSHARE Trust network, take a look at the `framework and roles page <https://framework.ishare.eu/is/framework-and-roles>`_ in the official iSHARE Scheme of agreements.
 
 .. image:: resources/180913M2MAuthenticationv1.7.png
 
-The sequence diagram refers to Service Consumer, Service Provider and Scheme Owner. Please note that this Authentication flow applies to various possible interactions. Each party that needs to authenticate another party requesting data or services can be authenticated through this flow.
+The sequence diagram refers to Service Consumer, Service Provider and iSHARE Satellite. Please note that this Authentication flow applies to various possible interactions. Each party that needs to authenticate another party requesting data or services can be authenticated through this flow.
                   
 In the demo section you can find :ref:`Postman Collections<refPostman>` that demo this authentication flow from the perspective of a Service Provider.
 
@@ -52,7 +52,7 @@ A request in iSHARE must always be signed by a certificate that is issued by a c
 Within iSHARE, it is necessary to match the identity on the certificate that is used to sign the client_assertion with the party identifier (EORI) within that client_assertion. It is possible that the EORI is not recorded on the certificate. Therefore, the standard procedure to verify the status of an iSHARE Party is as follows:
 
 1. Substract the certificate's full subject_name from the x5c-value.
-2. Send a request to the :ref:`/parties endpoint<refParties>` of the Scheme Owner. Parameter ``eori`` value should be ``client_id`` from request (it should be equal to ``iss`` or ``sub`` in ``client_assertion``). Parameter ``certificate_subject_name`` value should be the extracted ``subject_name`` from the x5c-value, every certificate attribute that exists in ``subject_name`` should be also present in ``certificate_subject_name``, **if at least one attribute is missing validation fails**.
+2. Send a request to the :ref:`/parties endpoint<refParties>` of the iSHARE Satellite. Parameter ``eori`` value should be ``client_id`` from request (it should be equal to ``iss`` or ``sub`` in ``client_assertion``). Parameter ``certificate_subject_name`` value should be the extracted ``subject_name`` from the x5c-value, every certificate attribute that exists in ``subject_name`` should be also present in ``certificate_subject_name``, **if at least one attribute is missing validation fails**.
 3. Decode the parties_token received and check the signature.
 4. In the information, the status of the party is listed under "status" and should be equal to "Active".
 

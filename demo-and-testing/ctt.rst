@@ -5,12 +5,12 @@ Conformance Test Tool
 
 The Conformance Test Tool (CTT) enables users to perform automated tests on their API services. To be allowed to join the production environment of the iSHARE Network, parties will need to pass all test cases that apply to their role in the iSHARE Network. The CTT will show you per test case whether you passed or failed the case.
 
-To be able to join the iSHARE network in the production environment, you are required to pass a full test run for your specific role in the network. If you have passed the test run for your specific role, please notify us of this at tooling@ishareworks.org with the identifier of your test run.
+To be able to join the iSHARE network in the production environment, you are required to pass a full test run for your specific role in the network. If you have passed the test run for your specific role, please notify us of this at support@ishare.eu with the identifier of your test run.
 
 Portal
 ------
 
-Users can login to the CTT at `admin portal <https://ctt.isharetest.net/admin>`_ and run a set of test cases on their API services. In order to login please request an account at tooling@ishareworks.org. Key functionalities what users of the Conformance Test Tool can do: 
+Users can login to the CTT at `admin portal <https://ctt.isharetest.net/admin>`_ and run a set of test cases on their API services. In order to login please request an account at support@ishare.eu. Key functionalities what users of the Conformance Test Tool can do: 
 
 * Run the full test run for a specific role in the iSHARE Network (i.e. Service Provider or Authorization Registry) on your API services;
 * Run a test run on your specific API Service (i.e. /token or /delegation);
@@ -23,7 +23,7 @@ Test Case Specifications
 
 The API services that need to conform to iSHARE standards differ per party role in the iSHARE Network. Different roles in the iSHARE Network require different sets of test cases as is detailed below. Below is only list of required endpoints, the full list of test cases per API service can be found at `CTT test cases page <https://ctt.isharetest.net/admin/test-cases>`_. 
 
-.. note:: The Conformance Test Tool can only check if you validate test-certificates correctly. It is your responsibility to validate PKIoverheid and eIDAS certificates correctly. To learn more please read :ref:`Certificate Validation<refCertificateValidation>` section.
+.. note:: The Conformance Test Tool can only check if you validate test-certificates correctly. It is your responsibility to validate PKI certificates correctly. To learn more please read :ref:`Certificate Validation<refCertificateValidation>` section.
 
 **Service Consumers**
 
@@ -120,7 +120,8 @@ What is next?
 
 After verifying compatibility:
 
-* Apply for eIDAS/PKI-Overheid Server certificate with an authorized Certificate Authority (Service Provider). Please note that application may take some time.
+In general you follow the steps listed below. Kindly refer to admission process at https://framework.ishare.eu/is/admission which is leading
+* Apply for appropriate signing certificate with an authorized Certificate Authority which is in the trusted-list. Please note that application may take some time. For general non-binding guidance please refer to https://github.com/iSHAREScheme/eSEALsGuide and feel free to contribute your learnings to the same.
 * Install certificate on your server
 * Register certificate with iSHARE Satellite
 * Sign Accession Agreement

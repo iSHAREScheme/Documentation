@@ -24,31 +24,6 @@ In order to start the development please read everything until you reach :ref:`G
 
 .. toctree::
    :hidden:
-   :caption: Reference
-
-   reference/standards
-   reference/jwt
-   reference/videos
-   reference/authentication
-   reference/authorization
-
-.. toctree::
-   :hidden:
-   :caption: Demo & Testing
-
-   demo-and-testing/postman
-   demo-and-testing/test-certificates
-   demo-and-testing/test-participants
-   demo-and-testing/ctt
-
-.. toctree::
-   :hidden:
-   :caption: Conformance Testing
-
-   demo-and-testing/ctt
-
-.. toctree::
-   :hidden:
    :caption: iSHARE Satellite Role
 
    common/token
@@ -94,6 +69,31 @@ In order to start the development please read everything until you reach :ref:`G
 
    common/token
    common/capabilities
+
+.. toctree::
+   :hidden:
+   :caption: Reference
+
+   reference/standards
+   reference/jwt
+   reference/videos
+   reference/authentication
+   reference/authorization
+
+.. toctree::
+   :hidden:
+   :caption: Demo & Testing
+
+   demo-and-testing/postman
+   demo-and-testing/test-certificates
+   demo-and-testing/test-participants
+   demo-and-testing/ctt
+
+.. toctree::
+   :hidden:
+   :caption: Conformance Testing
+
+   demo-and-testing/ctt
 
 .. toctree::
    :hidden:

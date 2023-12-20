@@ -1,4 +1,4 @@
-<img src="https://dev.ishareworks.org/_static/logo.svg" alt="iSHARE">
+<img src="https://dev.ishare.eu/_static/logo.svg" alt="iSHARE">
 
 # iSHARE Documentation
 The documentation is built with [Sphinx](https://github.com/sphinx-doc/sphinx) using a [rtd theme](https://github.com/readthedocs/sphinx_rtd_theme). The documentation is open sourced to allow the readers to directly contribute on its improvements.

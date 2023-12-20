@@ -3,7 +3,7 @@
 Delegation Endpoint
 ===================
 
-Used to obtain delegation evidence from an Authorization Registry or Entitled Party which later is used in request headers for Service Provider :ref:`service endpoint requests<refServiceEndpoint>`.
+Used to obtain delegation evidence from an Authorization Registry or Entitled Party which later is used in request headers for Service Provider :ref:`service endpoint requests<refServiceEndpoint>`. Alternatively, a Service Provider uses this endpoint to check for authorisation of the Service Consumer who is requesting a service.
 
 Request
 -------

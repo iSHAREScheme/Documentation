@@ -1,6 +1,6 @@
-.. _refDataspaces:
+.. _refep_creation:
 
-Dataspaces
+Create Entitled Party
 ============
 
 Used to programatically create a new Entitled Party (EP), without providing a certificate for this Entitled Party.

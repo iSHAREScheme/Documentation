@@ -13,7 +13,7 @@ Test implementation of a pure service consuming iSHARE participant. ABC Trucking
 * :download:`ABC Trucking.der<resources/participants/ABCTrucking.der>`
 
 iSHARE Satellite
-------------
+----------------
 
 Test implementation of the iSHARE Satellite. The Satellite maintains a database of active iSHARE participants
 

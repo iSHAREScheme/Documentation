@@ -57,6 +57,7 @@ In order to start the development please read everything until you reach :ref:`G
    satellite/versions.rst
    common/capabilities
    satellite/dataspaces
+   satellite/ep_creation.rst
    
 .. toctree::
    :hidden:

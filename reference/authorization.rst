@@ -7,7 +7,7 @@ Authorization
 .. _refM2MAuthorization:
 
 Machine to Machine (M2M) Authorization
-======================================
+--------------------------------------
 
 A core functionality of iSHARE is managing authorizations, either on an organisational level or on a personal level. Read more on the background of iSHARE Authorisations in the `iSHARE Scheme <https://framework.ishare.eu/is/facilitate-flexible-authorizations-applicable-in-a>`_.
 
@@ -22,7 +22,7 @@ Within iSHARE, participants can request so-called *delegation evidence* from eit
 .. _refH2MAuthorization:
 
 Human to Machine (H2M) Authorization
-====================================
+------------------------------------
 
 Besides authorization on an organisational level, within iSHARE it is also possible to authorize humans to act on behalf of another organisation. The generic OpenID Connect 1.0 flow does not take into account Authorizations of a human. However, in iSHARE it is essential that authorizations of a user are combined with their identity details before a service can be offered.
 

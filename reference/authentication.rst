@@ -7,7 +7,7 @@ Authentication
 .. _refM2MAuthentication:
 
 Machine to Machine (M2M) Authentication
-=======================================
+---------------------------------------
 
 iSHARE refers to the OAuth 2.0 protocol for authenticating parties and providing access tokens based on the iSHARE agreements when requesting access to a iSHARE complaint service. For the most recent version of the OAuth 2.0 specification visit `oauth.net <https://oauth.net/2/>`_. In addition or overriding to the OAuth 2.0 specifications, the following requirements apply for iSHARE:
 
@@ -178,7 +178,7 @@ Within iSHARE, it is necessary to match the identity on the certificate that is 
 .. _refH2MAuthentication:
 
 Human to Machine (H2M) Authentication
-=====================================
+-------------------------------------
 
 Besides Machine2Machine interaction, it can occur that it is relevant if a specific person requests data or a service. In order to provide a Service Provider with identity information about a human subject, iSHARE refers to the OpenID Connect 1.0 protocol.
 

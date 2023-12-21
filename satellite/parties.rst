@@ -209,7 +209,15 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`. In addition to th
         ``party_name``
             | **String**. Contained in ``party_info``.
             | Name of the party.
-    
+
+        ``capability_url``
+            | **String**. Contained in ``party_info``.
+            | :ref:`Capabilities endpoint<refCapabilitiesEndpoint>` of the party.
+
+        ``registrar_id``
+            | **String**. Contained in ``party_info``.
+            | Identifier of the party who registered the participant identified by the party_id attribute above.
+
         ``adherence``
             | **Object**. Contained in ``party_info``.
             | Object which contains status and validity timestamps of the party.
@@ -226,30 +234,175 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`. In addition to th
                 | **Timestamp (ISO 8601)**. Contained in ``adherence``.
                 | UTC timestamp which states till when adherence status has established.
     
-        ``certifications``
+        ``additional_info``
+            | **Object**. Contained in ``party_info``.
+            | Object which contains additional general contact information of the party.
+    
+            ``description``
+                | **String**. Contained in ``additional_info``.
+                | A brief description of the party.
+
+            ``logo``
+                | **String**. Contained in ``additional_info``.
+                | URL pointing to the endpoint where company logo can be found.
+
+            ``website``
+                | **String**. Contained in ``additional_info``.
+                | URL pointing to the endpoint where company logo can be found.
+
+            ``company_phone``
+                | **String**. Contained in ``additional_info``.
+                | General company phone number of the party.
+
+            ``company_email``
+                | **String**. Contained in ``additional_info``.
+                | General company email id of the party.
+    
+            ``publicly_publishable``
+                | **Boolean**. Contained in ``additional_info``.
+                | Consent to publicly publish the information contained in this object.
+
+            ``countries_operation``
+                | **Array of Objects**. Contained in ``additional_info``.
+                | An array of ISO names of the countries where the party operates.
+
+            ``sector_industry``
+                | **Array of Objects**. Contained in ``additional_info``.
+                | An array of GICS based sectors/industry that party serves in.
+
+            ``tags``
+                | **String**. Contained in ``additional_info``.
+                | An free text field containing keywords relevant for party.                
+    
+        ``agreements``
             | **Array of Objects**. Contained in ``data``.
-            | Collection of certifications of the party.
+            | Object which contains details about contracts including data space contracts that party has agreed and signed to.
+
+            ``type``
+                | **String**. Contained in the object of ``agreements``.
+                | Type of agreement. Refers to the official type of agreement. For iSHARE following types are available Terms of Use, Accession Agreement, Certified Party Agreement, Satellite Agreement. Additionally, each data space can define their own type and it can be listed here when appropriate dataspace is chosen.
+    
+            ``title``
+                | **String**. Contained in the object of ``agreements``.
+                | The name of the agreement or agreement file.
+    
+            ``status``
+                | **String**. Contained in the object of ``agreements``.
+                | Status of the agreement. Available values are *Draft*, *Signed*, *Accepted*, *Obsolete*.
+
+            ``sign_date``
+                | **Timestamp (ISO 8601)**. Contained in the object of ``agreements``.
+                | Date of signature of the agreement.
+
+            ``expiry_date``
+                | **Timestamp (ISO 8601)**. Contained in the object of ``agreements``.
+                | Expiry date of the agreement. For non expiring agreements the end date is far in future.
+
+            ``hash_file``
+                | **String**. Contained in the object of ``agreements``.
+                | The calculated hash of the agreement file that has been uploaded. Note agreements are not stored in ledger, but only their hash.
+
+            ``framework``
+                | **String**. Contained in the object of ``agreements``.
+                | The trust framework to which this agreement complies to. Currently, only iSHARE is available.
+
+            ``dataspace_id``
+                | **String**. Contained in the object of ``agreements``.
+                | The ID of the data space. If specified, party is onboarded in accordance to this data space's terms and conditions.
+
+            ``dataspace_title``
+                | **String**. Contained in the object of ``agreements``.
+                | The name of the selected dataspace.
+
+            ``complaiancy_verified``
+                | **String**. Contained in the object of ``agreements``.
+                | Legal compliance to this agreement has been verified in accordance with the process set in trust framework as we as data space governance. Possible values are *Yes*, *No*, *Not Applicable*.
+
+        ``certificates``
+            | **Array of Objects**. Contained in ``data``.
+            | Object which contains the details of the PKI/x509 certificates of the party. Either certificates or SPOR must be present.
+
+            ``subject_name``
+                | **String**. Contained in the object of ``certificates``.
+                | subjectName as encoded in the X.509 certificate which corresponds with the party that is being requested from the Scheme Owner. Used by the Scheme Owner to match the certificate identifier.
+
+            ``certificate_type``
+                | **String**. Contained in the object of ``certificates``.
+                | type of certificate.
+
+            ``enabled_from``
+                | **Timestamp (ISO 8601)**. Contained in the object of ``certificates``.
+                | UTC timestamp which states since when certificate is valid.
+
+            ``x5c``
+                | **String**. Contained in the object of ``certificates``.
+                | The base64 encoded pem format value of the certificate identified by its subject name and fingerprint.
+
+            ``x5t#s256``
+                | **String**. Contained in the object of ``certificates``.
+                | The SHA256 fingerprint of the certificate.
+
+        ``spor``
+            | **Array of Objects**. Contained in ``data``.
+            | The signed proof received from recognised issuer (currently eID identity providers) of information about the organisation and the authorised representative of that organisation being authenticated with "High" level of assurance.
+
+            ``signed_request``
+                | **String**. Contained in the object of ``certifications``.
+                | verifiable credentials of the participant signed by a trusted authority vouching for its authenticity.
+
+        ``roles``
+            | **Array of Objects**. Contained in ``data``.
+            | Object which contains details about the iSHARE roles of the party. The details include the level of assurance as well as compliance status for each role.
     
             ``role``
-                | **String**. Contained in the object of ``certifications``.
+                | **String**. Contained in the object of ``roles``.
                 | Role of acquired certification. Available values are *AuthorisationRegistry*, *IdentityProvider*, *IdentityBroker* or *SchemeOwner*.
     
             ``start_date``
-                | **Timestamp (ISO 8601)**. Contained in the object of ``certifications``.
+                | **Timestamp (ISO 8601)**. Contained in the object of ``roles``.
                 | UTC timestamp which states since when certification is valid.
     
             ``end_date``
-                | **Timestamp (ISO 8601)**. Contained in the object of ``certifications``.
+                | **Timestamp (ISO 8601)**. Contained in the object of ``roles``.
                 | UTC timestamp which states till when certification is valid.
     
             ``loa``
-                | **Integer**. Contained in the object of ``certifications``.
+                | **Integer**. Contained in the object of ``roles``.
                 | Certificate's level of assurance. Available values are *1* (low), *2* (substantial) and *3* (high).
-    
-        ``capability_url``
-            | **String**. Contained in ``party_info``.
-            | :ref:`Capabilities endpoint<refCapabilitiesEndpoint>` of the party.
 
+            ``compliancy_verified``
+                | **Boolean**. Contained in the object of ``roles``.
+                | Compliance requirements of this role has been met by party.
+
+            ``legal_adherence``
+                | **Boolean**. Contained in the object of ``roles``.
+                | Legal requirements of this role has been met by party including signing of appropriate agreements.
+
+        ``auth_registries``
+            | **Array of Objects**. Contained in ``data``.
+            | Object which contains details about the authorisation registers that the party uses.
+    
+            ``name``
+                | **String**. Contained in the object of ``auth_registries``.
+                | The name of the authorisation registry provider.
+
+            ``id``
+                | **String**. Contained in the object of ``auth_registries``.
+                | The Id of the authorisation registry provider.
+
+            ``url``
+                | **String**. Contained in the object of ``auth_registries``.
+                | The URL pointer specific to the party where authorisations can be queried/checked from.
+            
+            ``dataspace_id``
+                | **String**. Contained in the object of ``auth_registries``.
+                | The id of the data space where the party uses this authorisation registry provider.
+
+            ``dataspace_name``
+                | **String**. Contained in the object of ``auth_registries``.
+                | The name of the data space corresponding to the data space id.
+
+    
 200 OK Example
 ~~~~~~~~~~~~~~
 

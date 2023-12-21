@@ -105,18 +105,6 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`. In addition to th
                 | **Array**. Contained in the object of ``data``.
                 | Array of sector names in which the dataspace operates.
 
-    ``certificate_fingerprint``
-        | **String**. Contained in the object of ``trusted_list``.
-        | SHA256 fingerprint of the certificate.
-
-    ``validity``
-        | **String**. Contained in the object of ``trusted_list``.
-        | Validity of the certificate. Available values are *valid* or *invalid*.
-
-    ``status``
-        | **String**. Contained in the object of ``trusted_list``.
-        | Status of the certificate. Available values are *granted*, *withdrawn*, *supervisionceased* and *undersupervision*.
-
 200 OK Example
 ~~~~~~~~~~~~~~
 

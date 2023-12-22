@@ -33,6 +33,9 @@ In order to start the development please read everything until you reach :ref:`G
    reference/videos
    reference/authentication
    reference/authorization
+   delegation/delegation-request
+   delegation/policy-sets
+   delegation/delegation-evidence
 
 .. toctree::
    :hidden:
@@ -67,9 +70,6 @@ In order to start the development please read everything until you reach :ref:`G
 
    common/token
    delegation/endpoint
-   delegation/delegation-request
-   delegation/policy-sets
-   delegation/delegation-evidence
    common/capabilities
 
 .. toctree::

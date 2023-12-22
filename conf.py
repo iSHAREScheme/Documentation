@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('_ext'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'dev.ishare.eu'
+project = 'iSHARE Developer Portal'
 copyright = '2023, iSHARE'
 author = 'Rajiv Rajani | rajiv@ishare.eu'
 

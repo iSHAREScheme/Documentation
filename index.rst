@@ -16,7 +16,6 @@ In order to start the development please read everything until you reach :ref:`G
 .. note:: If you are looking for demo content before getting started with your implementation, such as :ref:`videos<refVideos>` or :ref:`postman collections<refPostman>`, that showcase how iSHARE works technically, head over to the Demo & Testing section!
 
 .. toctree::
-   https://nl-az1.isharetest.net/v1.11
    :hidden:
    :caption: Introduction
 

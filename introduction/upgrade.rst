@@ -18,14 +18,14 @@ Participant registration now can be done by any organisation playing the role of
 
 In terms of APIs from Scheme Owner to Satellite following is the status of their changes:
 
-* /connect/token -- no change
-* /capabiltiies  -- no change
-* /parties -- updated with new additional information. **Certifications** attribute is renamed to **roles**. For more details :ref: `Refer to API spec <refParties>`
-* /party -- is removed as per the deprication warning. The same functionality is available in /parties endpoint
-* /trusted-list -- no change
-* /versions -- no change
-* /dataspaces -- new endpoint listing all the registered Data Spaces details. :ref: `Refer the API spec <refDataspaces>`_.
-* /ep_creation -- new endpoint allowing satellites to create an Entitled Party programatically via API based on their validation and proof from certified Identity Provider. Note, this API is only for creating Entitled Party without PKI certificate
+* */connect/token* -- no change
+* */capabilities* -- no change
+* */parties* -- updated with new additional information. **Certifications** attribute is renamed to **roles**. For more details :ref:`Refer to API spec <refParties>_`
+* */party* -- is removed as per the deprication warning. The same functionality is available in /parties endpoint
+* */trusted-list* -- no change
+* */versions* -- no change
+* */dataspaces* -- new endpoint listing all the registered Data Spaces details. :ref:`Refer the API spec <refDataspaces>`_.
+* */ep_creation* -- new endpoint allowing satellites to create an Entitled Party programatically via API based on their validation and proof from certified Identity Provider. Note, this API is only for creating Entitled Party without PKI certificate
 
 Migrating to new backend
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -42,9 +42,9 @@ Process for migration
 
 Once you have familiarised wiht the changes and prepared for changes on your end, you may want to register your organisation and other organisations in test environment, if not done so already:
 
-1. Provide a test certificate along with (test) EORI for registering in test satellite. In case you do not have a test certificate, you can request one at `our test CA<https://ca7.isharetest.net:8442/ejbca/ra>`
+1. Provide a test certificate along with (test) EORI for registering in test satellite. In case you do not have a test certificate, you can request one at :ref:`our test CA<https://ca7.isharetest.net:8442/ejbca/ra>`
 2. Make the changes in your code and test them in the test network with other parties or using dummy parties.
-3. Publish your changes and reqest for conformance testing. :ref: `Details<refCTT>`.
+3. Publish your changes and reqest for conformance testing. :ref:`Details<refCTT>`.
 4. When passed, make sure that you submit the CTT results and PKI certificate for registering your organisation in the production environment by sending a request to support@ishare.eu. 
 
 .. note:: In order to provide continutiy iSHARE Foundation will still register participants on production satellite run by the foundation. If participants wish to register themselves via other satellites they are free to do so.

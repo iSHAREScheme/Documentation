@@ -151,9 +151,7 @@ Example
     > Authorization: Bearer IIeDIrdnYo2ngwDQYJKoZIhvcNAQELBQAwSDEZMBcGA1UEAwwQaVNIQ
 
     GET /parties?
-        eori=EU.EORI.NL000000004&
-        certificate_subject_name=C=NL, SERIALNUMBER=EU.EORI.NL000000004, CN=iSHARE Test Authorization Registry&
-        active_only=true
+        eori=EU.EORI.NL000000004
 
 (URL encoding removed, and line breaks added for readability)
 

@@ -55,8 +55,8 @@ html_theme = 'sphinx_rtd_theme'
 
 html_theme_options = {
     'canonical_url': '',
-    'logo_only': True,
-    'display_version': False,
+    'logo_only': False,
+    'display_version': True,
     'sticky_navigation': True,
     'navigation_depth': -1,
     'collapse_navigation': False

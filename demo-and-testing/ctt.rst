@@ -121,6 +121,7 @@ What is next?
 After verifying compatibility:
 
 In general you follow the steps listed below. Kindly refer to admission process at https://framework.ishare.eu/is/admission which is leading
+
 * Apply for appropriate signing certificate with an authorized Certificate Authority which is in the trusted-list. Please note that application may take some time. For general non-binding guidance please refer to https://github.com/iSHAREScheme/eSEALsGuide and feel free to contribute your learnings to the same.
 * Install certificate on your server
 * Register certificate with iSHARE Satellite

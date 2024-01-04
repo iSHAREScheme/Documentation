@@ -89,8 +89,7 @@ Parameters
 
 ``role``
     | **String**. *Optional*.
-    | Search parties based on their roles as defined in iSHARE role framework. Possible roles are Service Consumer/Service Provider/Entitled Party/Authorisation             
-    | Registry/Identity Provider/Identity Broker/iSHARE Satellite.
+    | Search parties based on their roles as defined in iSHARE role framework. Possible roles are *ServiceConsumer*, *ServiceProvider*, *EntitledParty*, *AuthorisationRegistry*, *IdentityProvider*, *IdentityBroker* and *iShareSatellite*.
 
 ``loA``
     | **String**. *Optional*.
@@ -98,7 +97,7 @@ Parameters
 
 ``compliancyVerified``
     | **Boolean**. *Optional*.
-    | Search parties that have their compliance to framework verified or not..
+    | Search parties that have their compliance to framework verified or not.
 
 ``legalAdherence``
     | **Boolean**. *Optional*.
@@ -322,7 +321,7 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`. In addition to th
 
             ``subject_name``
                 | **String**. Contained in the object of ``certificates``.
-                | subjectName as encoded in the X.509 certificate which corresponds with the party that is being requested from the Scheme Owner. Used by the Scheme Owner to match the certificate identifier.
+                | subjectName as encoded in the X.509 certificate which corresponds with the party that is being requested from the iSHARE Satellite. Used by the iSHARE Satellite to match the certificate identifier.
 
             ``certificate_type``
                 | **String**. Contained in the object of ``certificates``.
@@ -354,7 +353,7 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`. In addition to th
     
             ``role``
                 | **String**. Contained in the object of ``roles``.
-                | Role of acquired certification. Available values are *AuthorisationRegistry*, *IdentityProvider*, *IdentityBroker* or *SchemeOwner*.
+                | Role name. Possible roles are *ServiceConsumer*, *ServiceProvider*, *EntitledParty*, *AuthorisationRegistry*, *IdentityProvider*, *IdentityBroker* and *iShareSatellite*.
     
             ``start_date``
                 | **Timestamp (ISO 8601)**. Contained in the object of ``roles``.

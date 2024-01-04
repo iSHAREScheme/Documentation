@@ -1,7 +1,7 @@
 Party
 =====
 
-Used to obtain information about iSHARE participant from the iSHARE Scheme owner. Should be used to verify the status of an iSHARE participant.
+Used to obtain information about iSHARE participant from the iSHARE iSHARE Satellite. Should be used to verify the status of an iSHARE participant.
 
 .. warning:: This endpoint is obsolete and will be removed in the future. Please refer to :ref:`Parties Endpoint<refParties>` instead.
 
@@ -29,7 +29,7 @@ Parameters
 
 ``certificate_subject_name``
     | **String**. Query parameter. *Optional*.
-    | subjectName as encoded in the X.509 certificate which corresponds with the party that is being requested from the Scheme Owner. Used by the Scheme Owner to match the certificate identifier. Subject name attributes may be in any order, but all of them must be included and separated by comma, if at least one subject attribute is missing - information won't be returned. Only returns info if combined with the valid ``eori`` associated to it.
+    | subjectName as encoded in the X.509 certificate which corresponds with the party that is being requested from the iSHARE Satellite. Used by the iSHARE Satellite to match the certificate identifier. Subject name attributes may be in any order, but all of them must be included and separated by comma, if at least one subject attribute is missing - information won't be returned. Only returns info if combined with the valid ``eori`` associated to it.
 
 ``date_time``
     | **String**. Query parameter. *Optional*.

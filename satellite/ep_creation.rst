@@ -165,7 +165,7 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`. In addition to th
     
             ``role``
                 | **String**. Contained in the object of ``roles``.
-                | Role of acquired certification. Available values are *AuthorisationRegistry*, *IdentityProvider*, *IdentityBroker* or *SchemeOwner*.
+                | Role of the party that is created. Must be *EntitledParty*.
     
             ``start_date``
                 | **Timestamp (ISO 8601)**. Contained in the object of ``roles``.

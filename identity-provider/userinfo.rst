@@ -35,7 +35,7 @@ Example
     > Authorization: Bearer IIeDIrdnYo2ngwDQYJKoZIhvcNAQELBQAwSDEZMBcGA1UEAwwQaVNIQ
     < Content-Type: application/json; charset=UTF-8
 
-    POST connect/userinfo
+    POST /connect/userinfo
 
 Response
 --------

@@ -34,7 +34,7 @@ As an iSHARE Service Consumer, a minimum implementation requires connecting to t
 For your implementation, choose one of the following scenarios. A combination of scenarios is possible.
 
 Scenario 1: Minimum implementation
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The endpoint and specifications of the service that will be consumed are already available. Delegation evidence is acquired by the Service Provider.
 
 *Connection with the Service Provider*

@@ -29,7 +29,7 @@ Parameters
 
 ``certificate_subject_name``
     | **String**. Query parameter. *Optional*.
-    | subjectName as encoded in the X.509 certificate which corresponds with the party that is being requested from the iSHARE Satellite. Used by the iSHARE Satellite to match the certificate identifier. Subject name attributes may be in any order, but all of them must be included and separated by comma, if at least one subject attribute is missing - information won't be returned. Only returns info if combined with the valid ``eori`` associated to it.
+    | subjectName as encoded in the X.509 certificate which corresponds with the party that is being requested from the iSHARE Satellite. Subject name attributes may be in any order, but all of them must be included and separated by comma, if at least one subject attribute is missing - information won't be returned.
 
 ``date_time``
     | **String**. Query parameter. *Optional*.

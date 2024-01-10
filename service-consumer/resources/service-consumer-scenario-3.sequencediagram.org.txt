@@ -1,0 +1,37 @@
+title Service Consumer - Full implementation
+
+participant "Service Consumer" as SC
+participant "iSHARE Satellite" as SAT
+participant "Service Provider" as SP
+
+
+activate SC
+SC->SC:Create JWT
+SC->SAT:POST /connect/token
+activate SAT
+SAT->SC:Access Token (1)
+deactivate SAT
+SC->SAT:GET /trusted_list
+activate SAT
+SAT->SC: Trusted List
+deactivate SAT
+SC->SAT:GET /parties/<eori of service provider>
+activate SAT
+SAT->SC:Party
+deactivate SAT
+SC->SC:Check certificate against CAs in Trusted List
+SC->SC:Check certificate status (revocation, notAfter)
+SC->SC:Check party status and role
+SC->SC:Create JWT
+SC->SP:POST /connect/token
+activate SP
+SP->SC:Access Token (2)
+deactivate SP
+SC->SP:GET /capabilities
+activate SP
+SP->SC:Capabilities (including endpoints)
+deactivate SP
+SC->SP:GET/POST/... service (provide Access Token)
+activate SP
+SP->SC:Deliver service
+deactivate SP

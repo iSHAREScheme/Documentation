@@ -1,0 +1,20 @@
+title Service Consumer - Including /capabilities
+
+participant "Service Consumer" as SC
+participant "Service Provider" as SP
+
+activate SC
+SC->SC:Create JWT
+SC->SP:POST /connect/token
+activate SP
+SP->SC:Access Token
+deactivate SP
+SC->SP:GET /capabilities
+activate SP
+SP->SC:Capabilities (including endpoints)
+deactivate SP
+SC->SP:GET/POST/... service (provide Access Token)
+activate SP
+SP->SC:Deliver service
+deactivate SP
+deactivate SC

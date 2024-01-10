@@ -1,10 +1,10 @@
-title Service Consumer - Full implementation
+title Scenario 3: Perform prechecks on the Service Provider
 
 participant "Service Consumer" as SC
 participant "iSHARE Satellite" as SAT
 participant "Service Provider" as SP
 
-
+autonumber
 activate SC
 SC->SC:Create JWT
 SC->SAT:POST /connect/token
@@ -19,9 +19,11 @@ SC->SAT:GET /parties/<eori of service provider>
 activate SAT
 SAT->SC:Party
 deactivate SAT
+group Checks on Service Provider
 SC->SC:Check certificate against CAs in Trusted List
 SC->SC:Check certificate status (revocation, notAfter)
 SC->SC:Check party status and role
+end
 SC->SC:Create JWT
 SC->SP:POST /connect/token
 activate SP

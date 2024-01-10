@@ -1,11 +1,11 @@
-title Service Consumer - Full implementation with delegation evidence
+title Scenario 4: Full implementation, with prechecks and delegation evidence
 
 participant "Service Consumer" as SC
 participant "iSHARE Satellite" as SAT
 participant "Authorization Registry" as AR
 participant "Service Provider" as SP
 
-
+autonumber
 activate SC
 SC->SC:Create JWT
 SC->SAT:POST /connect/token
@@ -20,16 +20,20 @@ SC->SAT:GET /parties/<eori of service provider>
 activate SAT
 SAT->SC:Party
 deactivate SAT
+group Checks on Authorization Registry
 SC->SC:Check certificate against CAs in Trusted List
 SC->SC:Check certificate status (revocation, notAfter)
 SC->SC:Check party status and role
+end
 SC->SAT:GET /parties/<eori of authorization registry>
 activate SAT
 SAT->SC:Party
 deactivate SAT
+group Checks on Authorization Registry
 SC->SC:Check certificate against CAs in Trusted List
 SC->SC:Check certificate status (revocation, notAfter)
 SC->SC:Check party status and role
+end
 SC->SC:Create JWT
 SC->AR:POST /connect/token
 activate AR

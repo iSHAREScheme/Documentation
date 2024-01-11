@@ -8,19 +8,12 @@ Prerequisites
 
 Make sure you execute the following steps before trying to consume services provided by iSHARE Providers.
 
-.. list-table:: Consuming iSHARE services: prerequisites
-   :widths: 30 35 35
-   :header-rows: 1
-
-   * - Step
-     - iSHARE Staging
-     - iSHARE Production
-   * - Obtain a valid identity (private key + certificate)
-     - `Click here <https://ca7.isharetest.net:8442/ejbca/ra/index.xhtml>`_ to request a test certificate. More information on :ref:`Get Test Certificate section<refGetTestCert>`.
-     - Acquire a certificate from an eIDAS certificate provider.
-   * - Register yourself as iSHARE Consumer
-     - If you want to register at a specific iSHARE Satellite, contact the iSHARE Satellite through their communication channels. A registration via the Scheme Owner is also possible: contact us at support@ishare.eu. 
-     - Register yourself with any iSHARE Satellite using their registration procedure.
+#. Obtain a valid identity (private key + certificate)
+    * **Staging:** `Click here <https://ca7.isharetest.net:8442/ejbca/ra/index.xhtml>`_ to request a test certificate. More information on :ref:`Get Test Certificate section<refGetTestCert>`.
+    * **Production:** Acquire a certificate from an eIDAS certificate provider.
+#. Register yourself as iSHARE Consumer
+    * **Staging:** If you want to register at a specific iSHARE Satellite, contact the iSHARE Satellite through their communication channels. A registration via the Scheme Owner is also possible: contact us at support@ishare.eu. 
+    * **Production:** Register yourself with any iSHARE Satellite using their registration procedure.
 
 Implementation
 --------------
@@ -31,7 +24,7 @@ Every iSHARE Service Provider has implemented 2 standardised endpoints:
 
 As an iSHARE Service Consumer, a minimum implementation requires connecting to the Access Token endpoint. For more information about requesting an Access Token, refer to the section about the :ref:`Access Token Endpoint<refM2MToken>`. The request includes an iSHARE JWT, which is documented :ref:`here<refJWT>`. After obtaining an Access Token, this token can be used to consume services from the Service Provider. These services themselves are not standardised by iSHARE. 
 
-For your implementation, choose one of the following scenarios. A combination of scenarios is possible.
+For your implementation, choose one of the following scenarios. A combination of scenarios is possible. All scenarios assume that a protected service will be consumed.
 
 Scenario 1: Minimum implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

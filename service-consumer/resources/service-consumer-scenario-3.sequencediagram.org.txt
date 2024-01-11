@@ -19,21 +19,28 @@ SC->SAT:GET /parties/<eori of service provider>
 activate SAT
 SAT->SC:Party
 deactivate SAT
-group Checks on Service Provider
-SC->SC:Check certificate against CAs in Trusted List
-SC->SC:Check certificate status (revocation, notAfter)
-SC->SC:Check party status and role
-end
+SC->SC:Check party role, compliance and status
+SC->SP:GET /capabilities (public endpoints)
+activate SP
+SP->SC:Capabilities (including Access Token endpoint)
+deactivate SP
+SC->SC:Verify JWT
+SC->SC:Check JWT certificate with trusted_list
+SC->SC:Check JWT certificate for validity
+SC->SC:Check party information from JWT with /parties response (step 7)
 SC->SC:Create JWT
 SC->SP:POST /connect/token
 activate SP
 SP->SC:Access Token (2)
 deactivate SP
-SC->SP:GET /capabilities
+group If private endpoints are required
+SC->SP:GET /capabilities (private endpoints)
 activate SP
 SP->SC:Capabilities (including endpoints)
 deactivate SP
+end
 SC->SP:GET/POST/... service (provide Access Token)
 activate SP
 SP->SC:Deliver service
 deactivate SP
+deactivate SC

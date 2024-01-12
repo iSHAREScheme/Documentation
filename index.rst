@@ -1,5 +1,7 @@
-Welcome to iSHARE
-=================
+Welcome to iSHARE - v1.11
+=========================
+
+.. note:: This is old version and is to be depricated, please migrate to new version at earliest - `v2.0 here </v2.0>`_
 
 iSHARE is a collaborative effort to improve conditions for data-sharing for organisations within as well as across sectors. The iSHARE Scheme results in a set of agreements which improve circumstances for data exchange.
 

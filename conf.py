@@ -18,11 +18,11 @@ sys.path.insert(0, os.path.abspath('_ext'))
 # -- Project information -----------------------------------------------------
 
 project = 'dev.ishareworks.org'
-copyright = '2020, iSHARE'
+copyright = '2024, iSHARE'
 author = 'iSHARE'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0.0'
+release = '1.11.0'
 
 
 # -- General configuration ---------------------------------------------------

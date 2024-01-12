@@ -10,8 +10,8 @@ pool:
   vmImage: 'ubuntu-latest'
 strategy:
   matrix:
-    Python36:
-      python.version: '3.6'
+    Python3:
+      python.version: '3.12'
       architecture: 'x64'
 
 steps:
@@ -39,7 +39,7 @@ steps:
     rootFolderOrFile: '$(build.sourcesDirectory)/_build/html'
     includeRootFolder: false
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)_v1.11.zip'
     replaceExistingArchive: true
 
 - task: PublishBuildArtifacts@1

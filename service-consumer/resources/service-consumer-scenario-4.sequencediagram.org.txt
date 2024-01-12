@@ -26,7 +26,6 @@ activate SAT
 SAT->SC:Party
 deactivate SAT
 SC->SC:Check party role, compliance and status of Authorization Registry
-
 SC->AR:GET /capabilities (public endpoints)
 activate AR
 AR->SC:Capabilities (including Access Token endpoint)
@@ -34,22 +33,22 @@ deactivate AR
 SC->SC:Verify JWT
 SC->SC:Check JWT certificate with trusted_list
 SC->SC:Check JWT certificate for validity
-SC->SC:Check party information from JWT with /parties response (step 7)
+SC->SC:Check party information from JWT with /parties response (step 10)
 SC->SC:Create JWT
 SC->AR:POST /connect/token
 activate AR
 AR->SC:Access Token (2)
 deactivate AR
-SC->AR:GET /capabilities (private endpoints)
+group If restricted endpoints are required
+SC->AR:GET /capabilities (public and restricted endpoints)
 activate AR
 AR->SC:Capabilities (including endpoints)
 deactivate AR
+end
 SC->AR:POST /delegation
 activate AR
 AR->SC:Delegation Evidence
 deactivate AR
-
-
 SC->SP:GET /capabilities (public endpoints)
 activate SP
 SP->SC:Capabilities (including Access Token endpoint)
@@ -63,8 +62,8 @@ SC->SP:POST /connect/token
 activate SP
 SP->SC:Access Token (2)
 deactivate SP
-group If private endpoints are required
-SC->SP:GET /capabilities (private endpoints)
+group If restricted endpoints are required
+SC->SP:GET /capabilities (public and restricted endpoints)
 activate SP
 SP->SC:Capabilities (including endpoints)
 deactivate SP

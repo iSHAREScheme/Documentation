@@ -33,8 +33,8 @@ SC->SP:POST /connect/token
 activate SP
 SP->SC:Access Token (2)
 deactivate SP
-group If private endpoints are required
-SC->SP:GET /capabilities (private endpoints)
+group If restricted endpoints are required
+SC->SP:GET /capabilities (public and restricted endpoints)
 activate SP
 SP->SC:Capabilities (including endpoints)
 deactivate SP

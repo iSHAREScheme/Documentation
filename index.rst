@@ -82,6 +82,12 @@ In order to start the development please read everything until you reach :ref:`G
 
 .. toctree::
    :hidden:
+   :caption: Service Consumer Role
+
+   service-consumer/getting-started.rst
+
+.. toctree::
+   :hidden:
    :caption: Identity Provider Role
 
    identity-provider/authorize

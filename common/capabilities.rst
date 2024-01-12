@@ -3,9 +3,24 @@
 Capabilities
 ============
 
-The ``/capabilities`` endpoint is required for every participant that provides services. The endpoint returns iSHARE capabilities (supported versions & optional features) of the iSHARE party. Server response is an iSHARE signed JSON Web Token.
+The ``/capabilities`` endpoint is required for every participant that provides services:
 
-The capabilities endpoint should only return the public endpoints if no access token is provided. If an access token is provided, the capabilities endpoint will also provide the restricted endpoints. A party may also have *private* endpoints, which are endpoints for their own internal organization, also known as endpoints that are implemented, but not to share with the others. These endpoints are not within the scope of iSHARE and should not be returned to other iSHARE parties.
+* iSHARE Satellite
+* Authorisation Registry
+* Service Provider
+* Identity Provider
+
+The endpoint returns iSHARE capabilities of the iSHARE party. The server response is an iSHARE signed JSON Web Token.
+
+Depening on whether or not an Access Token is provided to the capabilities endpoint, the endpoint must return public or public and restricted endpoints. in detail:
+
+* If an access token IS NOT provided
+    * Return public endpoints, including the Access Token endpoint
+* If an access token IS provided
+    * Return public endpoints, including the Access Token endpoint
+    * Return restricted endpoints
+
+Any endpoints that are not intended to be part of the capabilities to be used by iSHARE roles (out of scope of iSHARE) must not be included in the capabilities endpoint return.
 
 Request
 -------
@@ -78,7 +93,7 @@ It contains :ref:`iSHARE compliant JWT claims<refJWTPayload>`, however if an acc
 
         ``role``
             | **String**. Contained in ``ishare_roles``.
-            | Should be on the following values: *Service Consumer*, *Service Provider*, *Entitled Party*, *Authorisation Registry*, *Identity Provider*, *Identity Broker*, *iSHARE Satellite*.
+            | Should be on the following values: *ServiceConsumer*, *ServiceProvider*, *EntitledParty*, *AuthorisationRegistry*, *IdentityProvider*, *IdentityBroker*, *iShareSatellite*.
 
     ``supported_versions``
         | **Array of Objects**. Contained in ``capabilities_info``.
@@ -146,7 +161,7 @@ Decoded JWT Payload
         "party_id": "EU.EORI.NL000000003",
         "ishare_roles": [
           {
-            "role": "Service Provider"
+            "role": "ServiceProvider"
           }
         ],
         "supported_versions": [

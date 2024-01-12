@@ -139,7 +139,7 @@ Example
 
     > Content-Type: application/x-www-form-urlencoded
 
-    POST connect/authorize
+    POST /connect/authorize
 
     response_type=code&
     client_id=EU.EORI.NL000000001&

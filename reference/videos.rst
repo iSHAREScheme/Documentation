@@ -26,7 +26,7 @@ Time          Topic
 10:45 - 12:42 How access tokens work in iSHARE
 ============= ====================================
 
-Slides available for download :download:`here <resources/videos/190425A_Getting_an_access_token.pdf>`.
+Slides available for download :download:`here <resources/190425A_Getting_an_access_token.pdf>`.
 
 Walkthrough of Postman (demo 1a)
 --------------------------------

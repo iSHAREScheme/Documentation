@@ -23,7 +23,7 @@ JWT Header
 
 * Signed JWTs MUST use and specify the RS256 algorithm in the alg header parameter.
 * Signed JWTs MUST contain an array of the complete certificate chain that should be used for validating the JWT's signature in the x5c header parameter up until an Issuing CA is listed from the iSHARE Trusted List.
-* Certificates MUST be formatted as base64 encoded DER.
+* Certificates MUST be formatted as base64 encoded PEM.
 * The certificate of the client MUST be the first in the array, the root certificate MUST be the last.
 * Except from the alg, typ and x5c parameter, the JWT header SHALL NOT contain other header parameters.
 

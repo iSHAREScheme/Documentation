@@ -1,5 +1,7 @@
-Welcome to iSHARE Developer Portal
-==================================
+Welcome to iSHARE Developer Portal - v 2.0
+==========================================
+
+.. note:: If you are looking for previous version - :ref:`v 1.11 here<https://dev.ishare.eu/v1.11>`
 
 iSHARE is a collaborative effort to improve conditions for data-sharing for organisations within as well as across sectors. The iSHARE Scheme results in a set of agreements which improve circumstances for data exchange.
 

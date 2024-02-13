@@ -27,7 +27,7 @@ This section describes the iSHARE delegation evidence data model, which is the r
 
         ``accessSubject``
             | **Object**. Contained in ``target``.
-            | iSHARE identifier of the delegate, also known as the entity that receives the delegated rights. It should be either EORI number for M2M cases or human pseudonym for H2M cases.
+            | iSHARE identifier of the delegate, also known as the entity that receives the delegated rights. It should be either iSHARE identifier for M2M cases or human pseudonym for H2M cases.
 
     ``policySets``
         | **Array of Objects**. Contained in ``delegationEvidence``.

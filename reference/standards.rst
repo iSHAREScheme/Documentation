@@ -39,7 +39,7 @@ HTTP(S)
 
 HyperText Transfer Protocol (Secure) is a communication protocol. iSHARE Scheme communication MUST be carried out over the HTTP protocol, and secured through TLS 1.2 resulting in HTTPS.
 
-iSHARE authentication/authorisation data is generally transferred in HTTP Headers. These headers can become very large when containing multiple encrypted certificates or JWT's. iSHARE parties SHOULD configure their web servers to accept HTTP headers of 100K length to minimise implementation impact on current services.
+iSHARE authentication/authorisation data is generally transferred in HTTP Headers. These headers can become very large when containing multiple encrypted certificates or JWT's. iSHARE parties SHOULD configure their web servers to accept HTTP headers of larger sizes (usually 10K or more) to minimise implementation impact on current services.
 
 The most recent version of the HTTP specification can be found at `w3.org <https://www.w3.org/Protocols/>`_.
 

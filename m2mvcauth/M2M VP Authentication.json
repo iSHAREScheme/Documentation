@@ -1,0 +1,471 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "M2M VP Authentication",
+        "version": "0.2",
+        "description": "This specification is draft specification for iSHARE specifications updated with compliance to W3C based VC-Model as specified here https://www.w3.org/TR/2022/REC-vc-data-model-20220303/\nAdditionally, it has been inspired from EBSI specifications defined at: https://api-pilot.ebsi.eu/docs/apis\nFollowing specifications specify OIDC based token endpoint typically useful for Human to Machine interaction https://api-pilot.ebsi.eu/docs/apis/authorisation/latest#/operations/post-v3-token and whereas this sepecifications are meant to be be used for Machine to Machine interaction and hence it has some deviations. Also, since this has to work with iSHARE there are some elements added for the same.",
+        "contact": {
+
+        },
+        "license": {
+            "name": "GNU AGPLv3",
+            "url": "https://www.gnu.org/licenses/agpl.txt"
+        }
+    },
+    "paths": {
+        "/authorisation/v4/token": {
+            "summary": "This endpoint allows a participant to present a Verifable Presentation to get an access token. The access token recevied is complaint with iSHARE framework and can be used in with other iSHARE participants.",
+            "description": "",
+            "post": {
+                "requestBody": {
+                    "description": "The verifialble presentation including the verifiable credentials",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/token_req"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/access_token"
+                                }
+                            }
+                        },
+                        "description": "When authentication is successful a token is returned"
+                    },
+                    "400": {
+                        "description": "When request is not correct, 400 is returned"
+                    },
+                    "401": {
+                        "description": "When the validation fails 401 is returned"
+                    }
+                },
+                "description": ""
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "verifiableCredential": {
+                "title": "Root Type for verifiableCredential",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "@context": {
+                        "description": "The context to be set. The credential and presentation are based W3C standard VC-Model. So \"https://www.w3.org/2018/credentials/v1\" is mandatory. Additional contexts could be added as necessary.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "id": {
+                        "description": "Freetext. The identifier of this credential. Can be URI or in any other format as needed.",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "Array of strings that defined the types of this credential. MUST contain \"VerifiableCredential\", \"iSHAREParticipant\" as types. Additional types MAY be added.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "issuer": {
+                        "description": "The Id of the issuer of the credentials. Typically, its the ID of the satellite who issued the particiant credentials.",
+                        "type": "string"
+                    },
+                    "issuanceDate": {
+                        "format": "date-time",
+                        "description": "date when credential was issued.",
+                        "type": "string"
+                    },
+                    "credentialSubject": {
+                        "$ref": "#/components/schemas/credentialSubject",
+                        "description": "Claims about the subject",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "participant": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "proof": {
+                        "$ref": "#/components/schemas/proof_vc",
+                        "description": "Digital proof that makes this credential tamper-evident.",
+                        "properties": {
+                            "type": {
+                                "type": "string"
+                            },
+                            "created": {
+                                "format": "date-time",
+                                "type": "string"
+                            },
+                            "proofPurpose": {
+                                "type": "string"
+                            },
+                            "verificationMethod": {
+                                "type": "string"
+                            },
+                            "jws": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "@context": [
+                        "https://www.w3.org/2018/credentials/v1",
+                        "https://www.w3.org/2018/credentials/examples/v1"
+                    ],
+                    "id": "http://example.edu/credentials/1872",
+                    "type": [
+                        "VerifiableCredential",
+                        "iSHAREParticipant"
+                    ],
+                    "issuer": "did:elsi:EU.EORI.NL000000000",
+                    "issuanceDate": "2010-01-01T19:23:24Z",
+                    "credentialSubject": {
+                        "id": "did:elsi:EU.EORI.NL000000001",
+                        "participant": {
+                            "id": "did:elsi:eu.eori.NL000000001"
+                        }
+                    },
+                    "proof": {
+                        "type": "RsaSignature2018",
+                        "created": "2017-06-18T21:19:10Z",
+                        "proofPurpose": "assertionMethod",
+                        "verificationMethod": "did:elsi:eu.eori.nl000000000#key-assertion",
+                        "jws": "eyJhbGciOiJSUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..TCYt5XsITJX1CxPCT8yAV-TVkIEq_PbChOMqsLfRoPsnsgw5WEuts01mq-pQy7UJiN5mgRxD-WUcX16dUEMGlv50aqzpqh4Qktb3rk-BuQy72IFLOqV0G_zS245-kronKb78cPN25DGlcTwLtjPAYuNzVBAh4vGHSrQyHUdBBPM"
+                    }
+                }
+            },
+            "credentialSubject": {
+                "title": "Root Type for credentialSubject",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "Id of the participant. ",
+                        "type": "string"
+                    },
+                    "participant": {
+                        "$ref": "#/components/schemas/participant",
+                        "description": "Details about the participant. Currently only Id is defined. Additional attributes are to be defined.",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "id": "did:elsi:EU.EORI.NL000000001",
+                    "participant": {
+                        "id": "did:elsi:eu.eori.NL000000001"
+                    }
+                }
+            },
+            "proof_vc": {
+                "title": "Root Type for proof_vc",
+                "description": "    Digital proof that makes this credential tamper-evident. This proof must be signed by issuer of the credentials.",
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "description": "The cryptographic sigature suite that was used to generate the signature.",
+                        "type": "string"
+                    },
+                    "created": {
+                        "format": "date-time",
+                        "description": "Timestamp when this signature was created",
+                        "type": "string"
+                    },
+                    "proofPurpose": {
+                        "description": "Purpose of this proof. For this request it MUST be \"assertionMethod\".",
+                        "type": "string"
+                    },
+                    "verificationMethod": {
+                        "description": "The identifier of the public key that can verify the signature.",
+                        "type": "string"
+                    },
+                    "jws": {
+                        "description": "the digital signautre value",
+                        "type": "string",
+                        "example": ""
+                    }
+                },
+                "example": {
+                    "type": "RsaSignature2018",
+                    "created": "2017-06-18T21:19:10Z",
+                    "proofPurpose": "assertionMethod",
+                    "verificationMethod": "did:elsi:eu.eori.nl000000000#key-assertion",
+                    "jws": "eyJhbGciOiJSUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..kTCYt5XsITJX1CxPCT8yAV-TVIw5WEuts01mq-pQy7UJiN5mgREEMGlv50aqzpqh4Qq_PbChOMqsLfRoPsnsgxD-WUcX16dUOqV0G_zS245-kronKb78cPktb3rk-BuQy72IFLN25DYuNzVBAh4vGHSrQyHUGlcTwLtjPAnKb78"
+                }
+            },
+            "proof_vp": {
+                "title": "Root Type for proof_vp",
+                "description": "Digital proof that makes this credential tamper-evident. This proof must be generated by the participant as part of the Verifiable Presentation and signed by its own certificate.",
+                "required": [
+                    "proofPurpose",
+                    "jws"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "description": "Cryptographic signature type of this proof. MUST be \"RsaSignature2018\". Additional types may be supported later.",
+                        "type": "string"
+                    },
+                    "created": {
+                        "format": "date-time",
+                        "description": "The timestamp when this signature was created.",
+                        "type": "string"
+                    },
+                    "proofPurpose": {
+                        "description": "Purpose for presenting this proof. MUST be set to \"Authentication\" for this request.",
+                        "type": "string",
+                        "example": "Authentication"
+                    },
+                    "verificationMethod": {
+                        "description": "The id of the public key that can verify the signature.",
+                        "type": "string"
+                    },
+                    "jws": {
+                        "description": "This must be a valid iSHARE client assertion as defined in iSHARE. Refer https://dev.ishare.eu/common/token.html and https://dev.ishare.eu/introduction/jwt.html for specifications",
+                        "type": "string",
+                        "example": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsIng1YyI6WyJNSUlFZ1RDQ0FtbWdBd0lCQWdJSU45VmlDRGkzQndzd0RRWUpLb1pJaHZjTkFRRUxCUUF3U0RFWk1CY0dBMVVFQXd3UWFWTklRVkpGVkdWemRFTkJYMVJNVXpFTk1Bc0dBMVVFQ3d3RVZHVnpkREVQTUEwR0ExVUVDZ3dHYVZOSVFWSkZNUXN3Q1FZRFZRUUdFd0pPVERBZUZ3MHhPVEF5TVRVeE1UUTJNVFZhRncweU1UQXlNVFF4TVRRMk1UVmFNRUl4RlRBVEJnTlZCQU1NREVGQ1F5QlVjblZqYTJsdVp6RWNNQm9HQTFVRUJSTVRSVlV1UlU5U1NTNU9UREF3TURBd01EQXdNVEVMTUFrR0ExVUVCaE1DVGt3d2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUJBUUMwTzRoVWhEK1ZvT0tWSVpTTk1OVGZ6YzBPMmtZaitaenBRRUFCWkd0UHR5MGtLUEplcDArbzV4c3RvdTFLK1V4dkhmeEVwSHhIR1RkdHFadWMyOExoVTRDZUNnb2VETURUK0NIUzNOb3NpRVNRTXdoL1paZVRjOS9lS0NvNTY5R0NuKzJYdFRpR1NwQlN3TVNXcU5IZ3BBWllLZEhyVC9rRU1JeVRLb2F1dWlLUThjVXA3b3c3bVp6LzlLK3FWM3M5TDAzMFc4SWF3TEpCSksvMmFwQXQ1amgxajQvbUY3ZjBxOHpoemhyQzh2MDFQTGxaZHVUempqQnJlN216K3lpL3ZsWXovZWFwMGVZVGpoeElhdHlWOUZGd2xtaTRGQzFDTmNNdExoOG5zaUpvZTVjQm0xM0xLYlFGdTNHWUg3Nm9lTFp2V3FiUGJwMTFteGxIYS9LZEFnTUJBQUdqZFRCek1Bd0dBMVVkRXdFQi93UUNNQUF3SHdZRFZSMGpCQmd3Rm9BVUZqem5JT25XbE84ZjVhTHh1UHkrNnQ4c040RXdFd1lEVlIwbEJBd3dDZ1lJS3dZQkJRVUhBd0V3SFFZRFZSME9CQllFRkFQSCs4VXJZaVZMWGFLUFJHZmxrQStjdXNRN01BNEdBMVVkRHdFQi93UUVBd0lGb0RBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQWdFQVlsNXRXSDBZdFlTOUp5cXlsWkpXb21BNTVTaEtsbGFCUmN2cm82Q0h4bGxKV0hvMHFDOVpUTWN2Q3l3TXYxNFZKeVFkNmVGWnFjVnRPbHVHclJaQmtsSDlBYW5rb3ZwMkpMYXFjRDc5dDFDeXVYWm5JelRGbC9Ca01zRTZ3bEFKWFkvc2Fybm94ZWllalA0RS9FZi8wZXVJRnZCYUlDQ0YrS2QyV0pZYmJuMFd5MGRINDg0UUpiSHlNdFZmcjQyb0lwVU5WdUxTdTg0eUtZQWVtOUpCdVlUcDNZMEsyaGlFQVcvYk9LRHZ2SGV0VmY1ZnU2NnlmZWtEWDUzajNOS2lGSkNYUzJyS0lab0R1TUZ1eHBTeVZrUzJrYldrMSs1Sm95N3FPU05BTlJGUGxwSGNnekxRWnA4SHJndmhzbWhJdDFWVFZZa3l4Y2Q4cVhBbGh3cVZnT3E1TmdMeGtxdWw5aE5NR2lNN3NxK0g3M1EvRmk4aWY3Z1A4SVZBU3pRR3d1SGcyWjg3aWI2QTJ2b24wZlJKWnEzZkl1YkhveEk2M0FUd2ZjUks4NnkxNzJ4YkZFM1ZVMGR1TjF0STVaMFRDZzBHQUpZdEpwYm52ZXhJdDVsazVGSWs0VGh2UjBMOG1OTHkxRFVhMTFOK0VNeGtxYmZxbFR1ckI4WmczQ1kvUWFTS21YWTVDTVV3V2VFQlhSSGh5ZmtaUTVqUFBVSHJGYW95T1JYOHAxRXJZRGt0QjFLOW80am11RVZwQjMzY3ZnWUJFaUF5VjV6NDQyNkZ1VkNNYkhhRkRWN2lLVzllQmxYb3hlWm80WFg4K2pYeVNMNUdXOFh3TlJUSzVjNHZXMDJRM1ZKeVlWZTV1bWVzdHNLUStMUjhpQXpvVVNyZUsxOCtKa0FqQUpVPSJdfQ.eyJpc3MiOiJFVS5FT1JJLk5MMDAwMDAwMDAxIiwic3ViIjoiRVUuRU9SSS5OTDAwMDAwMDAwMSIsImp0aSI6ImE1MjJjZWZkNGNmNjQyMWE4ZGUzOGJjYjBjMDhlYjliIiwiaWF0IjoxNTU2MDM0NzM0LCJuYmYiOjE1NTYwMzQ3MzQsImV4cCI6MTU1NjAzNDc2NCwiYXVkIjoiRVUuRU9SSS5OTDAwMDAwMDAwMCJ9.SU59EXhAukbDVP0Y8Yb_1-5Za7QCgAtgq_bh9qRKNY0t3P7nodr2b6ue2DqmIZ_bvysC77zX01QCiCCT3vT7iU4ee4HINMP9gsujoNC0L1ONL2twoJeE91hWUke8dBL9m_ipP0x5-XivQAdS9vJTHQu1A_m5VB0O_XD4JGLwrwjD2d-UE4Fhyy4ilKSPKFpqhoAi2qPkmonZki-RaYoPkrq49LW_v8OVKW7yFJvEDIwph0hEcWxl0udyeu3Cy35NWMnLZdu6gp2f4yxOq3FPrufO5bT0aihioI04V8avggzVJdVcrDTK9Q0Hzhs-22VamkncUZqPvRmo_uwypNHFBg\n"
+                    }
+                },
+                "example": {
+                    "type": "RsaSignature2018",
+                    "created": "2018-09-14T21:19:10Z",
+                    "proofPurpose": "authentication",
+                    "verificationMethod": "did:elsi:eu.eori.nl000000001#keys-1",
+                    "challenge": "1f44d55f-f161-4938-a659-f8026467f126",
+                    "domain": "4jt78h47fh47",
+                    "jws": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsIng1YyI6WyJNSUlFZ1RDQ0FtbWdBd0lCQWdJSU45VmlDRGkzQndzd0RRWUpLb1pJaHZjTkFRRUxCUUF3U0RFWk1CY0dBMVVFQXd3UWFWTklRVkpGVkdWemRFTkJYMVJNVXpFTk1Bc0dBMVVFQ3d3RVZHVnpkREVQTUEwR0ExVUVDZ3dHYVZOSVFWSkZNUXN3Q1FZRFZRUUdFd0pPVERBZUZ3MHhPVEF5TVRVeE1UUTJNVFZhRncweU1UQXlNVFF4TVRRMk1UVmFNRUl4RlRBVEJnTlZCQU1NREVGQ1F5QlVjblZqYTJsdVp6RWNNQm9HQTFVRUJSTVRSVlV1UlU5U1NTNU9UREF3TURBd01EQXdNVEVMTUFrR0ExVUVCaE1DVGt3d2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUJBUUMwTzRoVWhEK1ZvT0tWSVpTTk1OVGZ6YzBPMmtZaitaenBRRUFCWkd0UHR5MGtLUEplcDArbzV4c3RvdTFLK1V4dkhmeEVwSHhIR1RkdHFadWMyOExoVTRDZUNnb2VETURUK0NIUzNOb3NpRVNRTXdoL1paZVRjOS9lS0NvNTY5R0NuKzJYdFRpR1NwQlN3TVNXcU5IZ3BBWllLZEhyVC9rRU1JeVRLb2F1dWlLUThjVXA3b3c3bVp6LzlLK3FWM3M5TDAzMFc4SWF3TEpCSksvMmFwQXQ1amgxajQvbUY3ZjBxOHpoemhyQzh2MDFQTGxaZHVUempqQnJlN216K3lpL3ZsWXovZWFwMGVZVGpoeElhdHlWOUZGd2xtaTRGQzFDTmNNdExoOG5zaUpvZTVjQm0xM0xLYlFGdTNHWUg3Nm9lTFp2V3FiUGJwMTFteGxIYS9LZEFnTUJBQUdqZFRCek1Bd0dBMVVkRXdFQi93UUNNQUF3SHdZRFZSMGpCQmd3Rm9BVUZqem5JT25XbE84ZjVhTHh1UHkrNnQ4c040RXdFd1lEVlIwbEJBd3dDZ1lJS3dZQkJRVUhBd0V3SFFZRFZSME9CQllFRkFQSCs4VXJZaVZMWGFLUFJHZmxrQStjdXNRN01BNEdBMVVkRHdFQi93UUVBd0lGb0RBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQWdFQVlsNXRXSDBZdFlTOUp5cXlsWkpXb21BNTVTaEtsbGFCUmN2cm82Q0h4bGxKV0hvMHFDOVpUTWN2Q3l3TXYxNFZKeVFkNmVGWnFjVnRPbHVHclJaQmtsSDlBYW5rb3ZwMkpMYXFjRDc5dDFDeXVYWm5JelRGbC9Ca01zRTZ3bEFKWFkvc2Fybm94ZWllalA0RS9FZi8wZXVJRnZCYUlDQ0YrS2QyV0pZYmJuMFd5MGRINDg0UUpiSHlNdFZmcjQyb0lwVU5WdUxTdTg0eUtZQWVtOUpCdVlUcDNZMEsyaGlFQVcvYk9LRHZ2SGV0VmY1ZnU2NnlmZWtEWDUzajNOS2lGSkNYUzJyS0lab0R1TUZ1eHBTeVZrUzJrYldrMSs1Sm95N3FPU05BTlJGUGxwSGNnekxRWnA4SHJndmhzbWhJdDFWVFZZa3l4Y2Q4cVhBbGh3cVZnT3E1TmdMeGtxdWw5aE5NR2lNN3NxK0g3M1EvRmk4aWY3Z1A4SVZBU3pRR3d1SGcyWjg3aWI2QTJ2b24wZlJKWnEzZkl1YkhveEk2M0FUd2ZjUks4NnkxNzJ4YkZFM1ZVMGR1TjF0STVaMFRDZzBHQUpZdEpwYm52ZXhJdDVsazVGSWs0VGh2UjBMOG1OTHkxRFVhMTFOK0VNeGtxYmZxbFR1ckI4WmczQ1kvUWFTS21YWTVDTVV3V2VFQlhSSGh5ZmtaUTVqUFBVSHJGYW95T1JYOHAxRXJZRGt0QjFLOW80am11RVZwQjMzY3ZnWUJFaUF5VjV6NDQyNkZ1VkNNYkhhRkRWN2lLVzllQmxYb3hlWm80WFg4K2pYeVNMNUdXOFh3TlJUSzVjNHZXMDJRM1ZKeVlWZTV1bWVzdHNLUStMUjhpQXpvVVNyZUsxOCtKa0FqQUpVPSJdfQ.eyJpc3MiOiJFVS5FT1JJLk5MMDAwMDAwMDAxIiwic3ViIjoiRVUuRU9SSS5OTDAwMDAwMDAwMSIsImp0aSI6ImE1MjJjZWZkNGNmNjQyMWE4ZGUzOGJjYjBjMDhlYjliIiwiaWF0IjoxNTU2MDM0NzM0LCJuYmYiOjE1NTYwMzQ3MzQsImV4cCI6MTU1NjAzNDc2NCwiYXVkIjoiRVUuRU9SSS5OTDAwMDAwMDAwMCJ9.SU59EXhAukbDVP0Y8Yb_1-5Za7QCgAtgq_bh9qRKNY0t3P7nodr2b6ue2DqmIZ_bvysC77zX01QCiCCT3vT7iU4ee4HINMP9gsujoNC0L1ONL2twoJeE91hWUke8dBL9m_ipP0x5-XivQAdS9vJTHQu1A_m5VB0O_XD4JGLwrwjD2d-UE4Fhyy4ilKSPKFpqhoAi2qPkmonZki-RaYoPkrq49LW_v8OVKW7yFJvEDIwph0hEcWxl0udyeu3Cy35NWMnLZdu6gp2f4yxOq3FPrufO5bT0aihioI04V8avggzVJdVcrDTK9Q0Hzhs-22VamkncUZqPvRmo_uwypNHFBg"
+                }
+            },
+            "participant": {
+                "title": "Root Type for participant",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "Id of the participant. It should be same as Id in Credenital Subject. ",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "id": "did:elsi:eu.eori.NL000000001"
+                }
+            },
+            "access_token": {
+                "title": "Root Type for access_token",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "access_token": {
+                        "description": "Token string which can be used by bearer to get access to various other resources. Its upto the implementor on how they generate this token.",
+                        "type": "string"
+                    },
+                    "token_type": {
+                        "description": "MUST be \"Bearer\"",
+                        "type": "string"
+                    },
+                    "expires_in": {
+                        "format": "int32",
+                        "description": "Validity of the token in seconds",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "access_token": "aW2ys9NGE8RjHPZ4mytQivkWJO5HGQCYJ7VyMBGGDLIOw",
+                    "token_type": "Bearer",
+                    "expires_in": 3600
+                }
+            },
+            "token_req": {
+                "description": "token request body",
+                "required": [
+                    "grant_type",
+                    "vp_token",
+                    "presentation_submission",
+                    "scope"
+                ],
+                "type": "object",
+                "properties": {
+                    "grant_type": {
+                        "description": "MUST be set to \"vp_token\"",
+                        "type": "string",
+                        "example": "vp_token"
+                    },
+                    "vp_token": {
+                        "$ref": "#/components/schemas/vp_token",
+                        "description": "Signed Verifiable Presentation. See also the VP Token schema definition."
+                    },
+                    "presentation_submission": {
+                        "description": "Descriptor for the vp_token, linked by presentation_definition. See also the Presentation Definition schema.",
+                        "type": "string",
+                        "example": "Non-normative example: \n{\n    \"id\": \"jwt_vp with one jwt_vc\",\n    \"definition_id\": \"Selecting JWT from credentials\",\n    \"descriptor_map\": [\n        {\n            \"id\": \"requested credential id\",\n            \"format\": \"jwt_vp\",\n            \"path\": \"$\",\n            \"path_nested\": {\n                \"format\": \"jwt_vc\",\n                \"path\": \"$.vp.verifiableCredential[0]\"\n            }\n        }\n    ]\n}"
+                    },
+                    "scope": {
+                        "description": "token scope\nOAuth 2.0 scope. MUST contain iSHARE scope value. Other values allow the Consumer to get tokens that do not include all rights the Consumer has.",
+                        "type": "string",
+                        "example": "iSHARE "
+                    }
+                }
+            },
+            "presentation": {
+                "title": "Root Type for vp",
+                "description": "    ",
+                "required": [
+                    "@context",
+                    "type",
+                    "verifiableCredential",
+                    "proof"
+                ],
+                "type": "object",
+                "properties": {
+                    "@context": {
+                        "description": "The context to be set. The credential and presentation are based W3C standard VC-Model. So \"https://www.w3.org/2018/credentials/v1\" is mandatory. Additional contexts could be added as necessary.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "type": {
+                        "description": "MUST be \"VerifiablePresentation\"",
+                        "type": "string",
+                        "example": "\"VerifiablePresentation\""
+                    },
+                    "verifiableCredential": {
+                        "description": "Verifiable credentials issued by issuer which can be verified in this context.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/verifiableCredential"
+                        }
+                    },
+                    "proof": {
+                        "$ref": "#/components/schemas/proof_vp",
+                        "description": "Digital proof that makes this credential tamper-evident.",
+                        "properties": {
+                            "type": {
+                                "type": "string"
+                            },
+                            "created": {
+                                "format": "date-time",
+                                "type": "string"
+                            },
+                            "proofPurpose": {
+                                "type": "string"
+                            },
+                            "verificationMethod": {
+                                "type": "string"
+                            },
+                            "challenge": {
+                                "type": "string"
+                            },
+                            "domain": {
+                                "type": "string"
+                            },
+                            "jws": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "@context": [
+                        "https://www.w3.org/2018/credentials/v1",
+                        "https://www.w3.org/2018/credentials/examples/v1"
+                    ],
+                    "type": "VerifiablePresentation",
+                    "verifiableCredential": [
+                        {
+                            "@context": [
+                                "https://www.w3.org/2018/credentials/v1",
+                                "https://www.w3.org/2018/credentials/examples/v1"
+                            ],
+                            "id": "http://example.edu/credentials/1872",
+                            "type": [
+                                "VerifiableCredential",
+                                "iSHAREParticipant"
+                            ],
+                            "issuer": "did:elsi:EU.EORI.NL000000000",
+                            "issuanceDate": "2010-01-01T19:23:24Z",
+                            "credentialSubject": {
+                                "id": "did:elsi:EU.EORI.NL000000001",
+                                "participant": {
+                                    "id": "did:elsi:eu.eori.NL000000001"
+                                }
+                            },
+                            "proof": {
+                                "type": "RsaSignature2018",
+                                "created": "2017-06-18T21:19:10Z",
+                                "proofPurpose": "assertionMethod",
+                                "verificationMethod": "did:elsi:eu.eori.nl000000000#key-assertion",
+                                "jws": "eyJhbGciOiJSUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..TCYt5XsITJX1CxPCT8yAV-TVkIEq_PbChOMqsLfRoPsnsgw5WEuts01mq-pQy7UJiN5mgRxD-WUcX16dUEMGlv50aqzpqh4Qktb3rk-BuQy72IFLOqV0G_zS245-kronKb78cPN25DGlcTwLtjPAYuNzVBAh4vGHSrQyHUdBBPM"
+                            }
+                        }
+                    ],
+                    "proof": {
+                        "type": "RsaSignature2018",
+                        "created": "2018-09-14T21:19:10Z",
+                        "proofPurpose": "authentication",
+                        "verificationMethod": "did:elsi:eu.eori.nl000000001#keys-1",
+                        "challenge": "1f44d55f-f161-4938-a659-f8026467f126",
+                        "domain": "4jt78h47fh47",
+                        "jws": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsIng1YyI6WyJNSUlFZ1RDQ0FtbWdBd0lCQWdJSU45VmlDRGkzQndzd0RRWUpLb1pJaHZjTkFRRUxCUUF3U0RFWk1CY0dBMVVFQXd3UWFWTklRVkpGVkdWemRFTkJYMVJNVXpFTk1Bc0dBMVVFQ3d3RVZHVnpkREVQTUEwR0ExVUVDZ3dHYVZOSVFWSkZNUXN3Q1FZRFZRUUdFd0pPVERBZUZ3MHhPVEF5TVRVeE1UUTJNVFZhRncweU1UQXlNVFF4TVRRMk1UVmFNRUl4RlRBVEJnTlZCQU1NREVGQ1F5QlVjblZqYTJsdVp6RWNNQm9HQTFVRUJSTVRSVlV1UlU5U1NTNU9UREF3TURBd01EQXdNVEVMTUFrR0ExVUVCaE1DVGt3d2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUJBUUMwTzRoVWhEK1ZvT0tWSVpTTk1OVGZ6YzBPMmtZaitaenBRRUFCWkd0UHR5MGtLUEplcDArbzV4c3RvdTFLK1V4dkhmeEVwSHhIR1RkdHFadWMyOExoVTRDZUNnb2VETURUK0NIUzNOb3NpRVNRTXdoL1paZVRjOS9lS0NvNTY5R0NuKzJYdFRpR1NwQlN3TVNXcU5IZ3BBWllLZEhyVC9rRU1JeVRLb2F1dWlLUThjVXA3b3c3bVp6LzlLK3FWM3M5TDAzMFc4SWF3TEpCSksvMmFwQXQ1amgxajQvbUY3ZjBxOHpoemhyQzh2MDFQTGxaZHVUempqQnJlN216K3lpL3ZsWXovZWFwMGVZVGpoeElhdHlWOUZGd2xtaTRGQzFDTmNNdExoOG5zaUpvZTVjQm0xM0xLYlFGdTNHWUg3Nm9lTFp2V3FiUGJwMTFteGxIYS9LZEFnTUJBQUdqZFRCek1Bd0dBMVVkRXdFQi93UUNNQUF3SHdZRFZSMGpCQmd3Rm9BVUZqem5JT25XbE84ZjVhTHh1UHkrNnQ4c040RXdFd1lEVlIwbEJBd3dDZ1lJS3dZQkJRVUhBd0V3SFFZRFZSME9CQllFRkFQSCs4VXJZaVZMWGFLUFJHZmxrQStjdXNRN01BNEdBMVVkRHdFQi93UUVBd0lGb0RBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQWdFQVlsNXRXSDBZdFlTOUp5cXlsWkpXb21BNTVTaEtsbGFCUmN2cm82Q0h4bGxKV0hvMHFDOVpUTWN2Q3l3TXYxNFZKeVFkNmVGWnFjVnRPbHVHclJaQmtsSDlBYW5rb3ZwMkpMYXFjRDc5dDFDeXVYWm5JelRGbC9Ca01zRTZ3bEFKWFkvc2Fybm94ZWllalA0RS9FZi8wZXVJRnZCYUlDQ0YrS2QyV0pZYmJuMFd5MGRINDg0UUpiSHlNdFZmcjQyb0lwVU5WdUxTdTg0eUtZQWVtOUpCdVlUcDNZMEsyaGlFQVcvYk9LRHZ2SGV0VmY1ZnU2NnlmZWtEWDUzajNOS2lGSkNYUzJyS0lab0R1TUZ1eHBTeVZrUzJrYldrMSs1Sm95N3FPU05BTlJGUGxwSGNnekxRWnA4SHJndmhzbWhJdDFWVFZZa3l4Y2Q4cVhBbGh3cVZnT3E1TmdMeGtxdWw5aE5NR2lNN3NxK0g3M1EvRmk4aWY3Z1A4SVZBU3pRR3d1SGcyWjg3aWI2QTJ2b24wZlJKWnEzZkl1YkhveEk2M0FUd2ZjUks4NnkxNzJ4YkZFM1ZVMGR1TjF0STVaMFRDZzBHQUpZdEpwYm52ZXhJdDVsazVGSWs0VGh2UjBMOG1OTHkxRFVhMTFOK0VNeGtxYmZxbFR1ckI4WmczQ1kvUWFTS21YWTVDTVV3V2VFQlhSSGh5ZmtaUTVqUFBVSHJGYW95T1JYOHAxRXJZRGt0QjFLOW80am11RVZwQjMzY3ZnWUJFaUF5VjV6NDQyNkZ1VkNNYkhhRkRWN2lLVzllQmxYb3hlWm80WFg4K2pYeVNMNUdXOFh3TlJUSzVjNHZXMDJRM1ZKeVlWZTV1bWVzdHNLUStMUjhpQXpvVVNyZUsxOCtKa0FqQUpVPSJdfQ.eyJpc3MiOiJFVS5FT1JJLk5MMDAwMDAwMDAxIiwic3ViIjoiRVUuRU9SSS5OTDAwMDAwMDAwMSIsImp0aSI6ImE1MjJjZWZkNGNmNjQyMWE4ZGUzOGJjYjBjMDhlYjliIiwiaWF0IjoxNTU2MDM0NzM0LCJuYmYiOjE1NTYwMzQ3MzQsImV4cCI6MTU1NjAzNDc2NCwiYXVkIjoiRVUuRU9SSS5OTDAwMDAwMDAwMCJ9.SU59EXhAukbDVP0Y8Yb_1-5Za7QCgAtgq_bh9qRKNY0t3P7nodr2b6ue2DqmIZ_bvysC77zX01QCiCCT3vT7iU4ee4HINMP9gsujoNC0L1ONL2twoJeE91hWUke8dBL9m_ipP0x5-XivQAdS9vJTHQu1A_m5VB0O_XD4JGLwrwjD2d-UE4Fhyy4ilKSPKFpqhoAi2qPkmonZki-RaYoPkrq49LW_v8OVKW7yFJvEDIwph0hEcWxl0udyeu3Cy35NWMnLZdu6gp2f4yxOq3FPrufO5bT0aihioI04V8avggzVJdVcrDTK9Q0Hzhs-22VamkncUZqPvRmo_uwypNHFBg"
+                    }
+                }
+            },
+            "vp_token": {
+                "description": "Verifiable presentation as specified \"vp\" as a signed JWT\nis array of",
+                "required": [
+                    "format",
+                    "presentation"
+                ],
+                "type": "object",
+                "properties": {
+                    "format": {
+                        "description": "REQUIRED. MUST specify format of the returned VP. MUST be jwt_vp if Verifiable Presentation is returned in a JWT (JWS) format ",
+                        "type": "string"
+                    },
+                    "presentation": {
+                        "$ref": "#/components/schemas/presentation",
+                        "description": "REQUIRED. Base64 encoded W3C Verifiable Presentation"
+                    }
+                },
+                "example": [
+                    {
+                        "format": "jwt_vp",
+                        "presentation": [
+                            "ewogICAgImlzcyI6Imh0dHBzOi8vYm9vay5pdHNvdXJ3ZWIub...IH0"
+                        ]
+                    }
+                ]
+            }
+        },
+        "responses": {
+            "access_token": {
+                "content": {
+                    "application/json": {
+
+                    }
+                },
+                "description": ""
+            }
+        }
+    }
+}

@@ -1,0 +1,25 @@
+title Scenario 2: Using the /capabilities endpoint
+
+participant "Service Consumer" as SC
+participant "Service Provider" as SP
+
+autonumber
+activate SC
+SC->SP:GET /capabilities
+activate SP
+SP->SC:Capabilities (including Access Token endpoint)
+deactivate SP
+SC->SC:Create JWT
+SC->SP:POST /connect/token
+activate SP
+SP->SC:Access Token
+deactivate SP
+SC->SP:GET /capabilities
+activate SP
+SP->SC:Capabilities (including endpoints)
+deactivate SP
+SC->SP:GET/POST/... service (provide Access Token)
+activate SP
+SP->SC:Deliver service
+deactivate SP
+deactivate SC

@@ -3,7 +3,7 @@
 Trusted list
 ============
 
-Used to obtain the iSHARE trusted list of certificate authorities. This will return PKIoverheid and eIDAS-qualified CAs valid under iSHARE.
+Used to obtain the iSHARE trusted list of certificate authorities. Currently, eIDAS certificate issuer certificate authorities.
 
 Request
 -------

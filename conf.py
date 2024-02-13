@@ -17,12 +17,12 @@ sys.path.insert(0, os.path.abspath('_ext'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'dev.ishareworks.org'
-copyright = '2020, iSHARE'
-author = 'iSHARE'
+project = 'iSHARE Developer Portal'
+copyright = '2024, iSHARE'
+author = 'Rajiv Rajani | rajiv@ishare.eu'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0.0'
+release = '2.0.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -56,7 +56,7 @@ html_theme = 'sphinx_rtd_theme'
 html_theme_options = {
     'canonical_url': '',
     'logo_only': True,
-    'display_version': False,
+    'display_version': True,
     'sticky_navigation': True,
     'navigation_depth': -1,
     'collapse_navigation': False

@@ -12,14 +12,14 @@ Test implementation of a pure service consuming iSHARE participant. ABC Trucking
 * :download:`ABC Trucking.pem<resources/participants/ABCTruckingCert.pem>`
 * :download:`ABC Trucking.der<resources/participants/ABCTrucking.der>`
 
-Scheme Owner
-------------
+iSHARE Satellite
+----------------
 
-Test implementation of the iSHARE Scheme Owner. The Scheme Owner maintains a database of active iSHARE participants
+Test implementation of the iSHARE Satellite. The Satellite maintains a database of active iSHARE participants
 
 * **EORI / iSHARE identifier**: EU.EORI.NL000000000
-* **API Endpoint base URL**: https://scheme.isharetest.net
-* **OpenAPI Specification**: `SO Swagger UI <https://scheme.isharetest.net/swagger>`_
+* **API Endpoint base URL**: https://sat-mw.uat.isharetest.net
+* **OpenAPI Specification**: `Satellite Swagger <https://app.swaggerhub.com/apis/iSHARE/i-share_satellite/>`_
 * :download:`Scheme Owner.pem <resources/participants/iSHARESchemeOwner.pem>`
 
 .. note:: ``/certificate_validation``, ``/me``, ``/testing/generate-jws``, ``/testing/generate-authorize-request`` endpoints in Swagger UI are not a part of the official iSHARE specification. They are provided for additional test functionality only. Therefore, it is unavailable in production environment.
@@ -61,7 +61,7 @@ Test implementation of an Entitled Party. Besides being a resource owner across 
 
 .. note:: ``/me`` endpoint in Swagger UI are neither a part of the official iSHARE specification nor a B&C business logic specific endpoints. They are provided for additional test functionality only.
 
-.. tip:: If you need to test against this Entitled Party's delegation endpoint, please contact us at tooling@ishareworks.org and we will issue an account for you in order to access the UI.
+.. tip:: If you need to test against this Entitled Party's delegation endpoint, please contact us at support@ishare.eu and we will issue an account for you in order to access the UI.
 
 Authorization Registry
 ----------------------
@@ -78,4 +78,4 @@ Test implementation of an Authorisation Registry. Users can get an account for t
 
 .. note:: ``/me`` and ``/policy`` endpoints in Swagger UI are not a part of the official iSHARE specification. They are provided for additional test functionality only.
 
-.. tip:: If you need to test against this Authorization Registry's delegation endpoint, please contact us at tooling@ishareworks.org and we will issue an account for you in order to access the UI.
+.. tip:: If you need to test against this Authorization Registry's delegation endpoint, please contact us at support@ishare.eu and we will issue an account for you in order to access the UI.

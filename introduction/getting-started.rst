@@ -48,14 +48,14 @@ Request Services With Access Tokens
 Exposing iSHARE services
 ------------------------
 
-Before exposing any of iSHARE services, firstly you should have a proper implemention of :ref:`iSHARE services consumption<refConsumeISHARE>`. It is needed in order to retrieve an access token from the Scheme Owner or other iSHARE parties. 
+Before exposing any of iSHARE services, firstly you should have a proper implemention of :ref:`iSHARE services consumption<refConsumeISHARE>`. It is needed in order to retrieve an access token from the iSHARE Satellite or other iSHARE parties. 
 
 Certificate Validation
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Familiarize yourself with PKI, certificates and how the process of certificate validation works. iSHARE has a *certificate cheat sheet*, :download:`check it out <resources/181113iSHARE_Certificate_cheat_sheet_v1.pdf>`.
 
-1. Implement a function that retrieves the trusted list of Certificate Authorities from the Scheme Owner :ref:`/trusted_list endpoint<refTrustedList>`.
+1. Implement a function that retrieves the trusted list of Certificate Authorities from the iSHARE Satellite :ref:`/trusted_list endpoint<refTrustedList>`.
 2. Implement a service that can validate certificates within the scope of iSHARE (see :ref:`Certificate Validation<refCertificateValidation>`. Implemented service should check validity of certificate itself (such as expiry date, signature, CRL) and whether the certificate issuer is on the trusted list of iSHARE.
 
 .. note:: iSHARE has example projects and code snippets on GitHub, it also contains certificate validion, `check it out <https://github.com/iSHAREScheme>`_.
@@ -67,7 +67,7 @@ In order to be a party of iSHARE your system must expose an API service that all
 
 1. For incoming token requests, make sure that they comply with the specified iSHARE :ref:`token requests<refM2MToken>`.
 2. Validate the certificate used for this request. It is in a JWT header of ``client_assertion``.
-3. Send the client’s iSHARE ID or EORI (found as ``subject`` within the request’s ``client_assertion``) plus the certificate's ``subject_name`` to the Scheme Owner :ref:`/parties endpoint<refParties>` for status check. Response for party status should be equal to *Active*.
+3. Send the client’s iSHARE ID (found as ``iss`` within the request’s ``client_assertion``) to the iSHARE Satellite :ref:`/parties endpoint<refParties>` for status check. Response for party status should be equal to *Active*.
 4. If the party is *Active*, respond to their request with an access token, else with Bad Request.
 
 .. note:: Sequence diagram of this flow can be found at :ref:`Generic Authentication Flow section<refM2MTokenFlow>`.

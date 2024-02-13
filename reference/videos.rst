@@ -6,7 +6,7 @@ Videos
 This section contains various video demos of iSHARE in action. Below some videos timestamps are included. These are abbrevations for the test parties:
 
 * **AR** - Authorization Registry
-* **SO** - Scheme Owner
+* **SO** - Scheme Owner (since iSHARE 2.0 this role is performed by the iSHARE Satellite - wherever SO is mentioned, this must be interpreted as iSHARE Satellite)
 * **W13** - Warehouse 13 (Service Provider)
 
 .. _refGetAccessTokenDemo:
@@ -26,7 +26,7 @@ Time          Topic
 10:45 - 12:42 How access tokens work in iSHARE
 ============= ====================================
 
-Slides available for download :download:`here <resources/videos/190425A_Getting_an_access_token.pdf>`.
+Slides available for download :download:`here <resources/190425A_Getting_an_access_token.pdf>`.
 
 Walkthrough of Postman (demo 1a)
 --------------------------------

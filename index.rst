@@ -1,15 +1,17 @@
-Welcome to iSHARE
-=================
+Welcome to iSHARE Developer Portal - v 2.0
+==========================================
+
+.. note:: If you are looking for previous version - `v1.11 here </v1.11>`_
 
 iSHARE is a collaborative effort to improve conditions for data-sharing for organisations within as well as across sectors. The iSHARE Scheme results in a set of agreements which improve circumstances for data exchange.
 
 The ambition of iSHARE is to lower barriers for sharing data, to empower new forms of collaboration in chains and to help scale up existing initiatives that aim to improve conditions for data exchange. The underlying assumption is that if data can flow in a controlled and smart way, it will lead to a more efficient use of infrastructure, less carbon emissions and a more competitive datadriven organisations. 
 
-iSHARE is not a platform. iSHARE from a technical perspective is an identification, authentication & authorization protocol for both machine2machine (M2M) and human2machine (H2M) communication based on a JSON REST API architecture. Authentication is heavily based on Public Key Infrastructure (PKI) and therefore certificates and public / private key pairs. iSHARE relies heavily on signed JSON Web Tokens for protecting the integrity of message content. Every party of iSHARE validates signatures and interpret the content of JWTs. Every party creates and signs these tokens depending on the context.
+Traditionally, a software infrastucure is created to facilitate organisations to a standardised and controlled data exchange where iSHARE deviates from it and rather provides "soft infrastructure". iSHARE from a technical perspective is an identification, authentication & authorization protocol for both machine2machine (M2M) and human2machine (H2M) communication based on REST API architecture. Authentication is heavily based on Public Key Infrastructure (PKI) and therefore certificates and public / private key pairs. iSHARE relies heavily on signed JSON Web Tokens for protecting the integrity of message content. Every party of iSHARE validates signatures and interpret the content of JWTs. Every party creates and signs these tokens depending on the context.
 
-The iSHARE framework consists of six roles that, depending on the situation, interact with each other based on the iSHARE scheme agreements. Each role has a certain function in the scheme and bears certain responsibilities (read more at our `non so technical documentation <https://ishareworks.atlassian.net/wiki/spaces/IS/pages/70221987/Framework+and+roles>`_. If you are here, perhaps you need to implement the solution for your organization according to iSHARE specific role requirements.
+Every data sharing transaction must be mapped to iSHARE role model. The iSHARE framework consists of six roles that, depending on the situation, interact with each other based on the iSHARE scheme agreements. Each role has a certain function in the scheme and bears certain responsibilities (read more at our `non so technical documentation <https://framework.ishare.eu/is/framework-and-roles>`_. If you are here, perhaps you need to implement the solution for your organization according to iSHARE specific role requirements.
 
-This developer portal provides everything needed to get started with implementing iSHARE for your organization. The open standards used need to be configured towards iSHARE usage. It is therefore essential to familiarize yourself with some technical concepts that are present on Introduction section in order to be able to smoothly implement iSHARE for your organization. Currently there is a `.NET library <https://github.com/iSHAREScheme/iSHARE.NET>`_ which provides core functionality for service consumers.
+This developer portal provides everything needed to get started with implementing iSHARE for your organization. The open standards used need to be configured towards iSHARE usage. It is therefore essential to familiarize yourself with some technical concepts that are present on Introduction section in order to be able to smoothly implement iSHARE for your organization. For reference implementations and opensource components compliant with iSHARE spifications please refer to our `GitHub  <https://github.com/iSHAREScheme/>`_ .
 
 In order to start the development please read everything until you reach :ref:`Getting Started page<refGettingStarted>`.
 
@@ -19,43 +21,82 @@ In order to start the development please read everything until you reach :ref:`G
    :hidden:
    :caption: Introduction
 
-   introduction/standards
-   introduction/jwt
-   introduction/help
    introduction/getting-started
+   introduction/upgrade
+   introduction/help
+
+.. toctree::
+   :hidden:
+   :caption: Reference
+
+   reference/standards
+   reference/jwt
+   reference/videos
+   reference/authentication
+   reference/authorization
+   delegation/delegation-request
+   delegation/policy-sets
+   delegation/delegation-evidence
 
 .. toctree::
    :hidden:
    :caption: Demo & Testing
 
    demo-and-testing/postman
-   demo-and-testing/videos
    demo-and-testing/test-certificates
    demo-and-testing/test-participants
    demo-and-testing/ctt
 
 .. toctree::
    :hidden:
-   :caption: M2M Interaction
+   :caption: Conformance Testing
 
-   m2m/authentication
-   m2m/authorization
-
-.. toctree::
-   :hidden:
-   :caption: H2M Interaction
-
-   h2m/authentication
-   h2m/authorization
+   demo-and-testing/ctt
 
 .. toctree::
    :hidden:
-   :caption: Delegation
+   :caption: iSHARE Satellite Role
 
+   common/token
+   satellite/parties.rst
+   satellite/trusted-list.rst
+   satellite/versions.rst
+   common/capabilities
+   satellite/dataspaces
+   satellite/ep_creation.rst
+   
+.. toctree::
+   :hidden:
+   :caption: Authorisation Registry Role
+
+   common/token
    delegation/endpoint
-   delegation/delegation-request
-   delegation/policy-sets
-   delegation/delegation-evidence
+   common/capabilities
+
+.. toctree::
+   :hidden:
+   :caption: Service Provider Role
+
+   common/token
+   service-provider/return
+   service-provider/service
+   common/capabilities
+
+.. toctree::
+   :hidden:
+   :caption: Service Consumer Role
+
+   service-consumer/getting-started.rst
+
+.. toctree::
+   :hidden:
+   :caption: Identity Provider Role
+
+   identity-provider/authorize
+   identity-provider/login
+   identity-provider/token
+   identity-provider/userinfo
+   common/capabilities
 
 .. toctree::
    :hidden:
@@ -64,31 +105,6 @@ In order to start the development please read everything until you reach :ref:`G
    common/token
    common/capabilities
 
-.. toctree::
-   :hidden:
-   :caption: Scheme Owner Endpoints
-   
-   scheme-owner/parties-id.rst
-   scheme-owner/parties.rst
-   scheme-owner/trusted-list.rst
-   scheme-owner/versions.rst
-
-.. toctree::
-   :hidden:
-   :caption: Service Provider Endpoints
-
-   service-provider/return
-   service-provider/service
-
-.. toctree::
-   :hidden:
-   :caption: Identity Provider Endpoints
-
-   identity-provider/authorize
-   identity-provider/login
-   identity-provider/token
-   identity-provider/userinfo
-   
 .. toctree::
    :hidden:
    :caption: UI Guidelines

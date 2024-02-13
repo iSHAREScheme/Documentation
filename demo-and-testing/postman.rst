@@ -14,7 +14,8 @@ Downloads
 
 In order for the collections to work, please download iSHARE :download:`environment <resources/postman/190509A_iSHARE_Test_Environment.postman_environment.json>` and :download:`globals <resources/postman/190312A_iSHARE_Globals.postman_globals.json>`. Then download the following Postman collections:
 
-* :download:`ABC Trucking and the Scheme Owner <resources/postman/190509A_iSHARE_Test_-_ABC_Trucking_and_Scheme_Owner.postman_collection.json>`
+* :download:`ABC Trucking and the Scheme Owner (only for iSHARE framework version 1.x) <resources/postman/190509A_iSHARE_Test_-_ABC_Trucking_and_Scheme_Owner.postman_collection.json>`
+* :download:`ABC Trucking and the Satellite (from iSHARE framework version 2.x onwards) <resources/postman/13feb2024_iSHARE_satellite_PIR_Test.postman_collection.json>` and its releated :download:`environment <resources/postman/13feb2024_iSHARE_satellite_PIR_Test_env.postman_collection.json>`
 * :download:`ABC Trucking and Warehouse 13 <resources/postman/190509A_iSHARE_Test_-_ABC_Trucking_and_Warehouse13.postman_collection.json>`
 * :download:`ABC Trucking and the Authorization Registry <resources/postman/190312A_iSHARE_Test_-_ABC_Trucking_and_Authorization_Registry.postman_collection.json>`
 * :download:`ABC Trucking and Awesome Widgets <resources/postman/190312A_iSHARE_Test_-_ABC_Trucking_and_Awesome_Widgets.postman_collection.json>`

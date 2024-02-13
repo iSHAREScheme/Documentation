@@ -1,0 +1,93 @@
+{
+	"id": "9f79425c-b91f-4800-8103-318afe34c4eb",
+	"name": "TestSat1-PIR",
+	"values": [
+		{
+			"key": "variablesSet",
+			"value": "(key, value) => { \n    console.log('Set variables: ', JSON.stringify({key: value}));\n    pm.variables.set(key, value);\n}",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "generateJwsToken",
+			"value": "(iss, aud, x5c, privateKey) => {\n    pm.sendRequest(gl.createGenerateJwsRequest(iss, aud, x5c, privateKey), function (err, response) {\n\t\t\t\tif (err === null && response != null && response.code == 200) {\n    \t\t\t\tconst clientAssertion = gl.arrayBufferToString(response.stream);\n    \t\t\t   \n    \t\t\t\tpm.variables.set('client_assertion', clientAssertion);\n\t\t\t\t} else {\n\t\t\t\t    console.log('ERR!!! client_assertion could not be retrieved. Error: ' + err);\n\t\t\t\t    handler(err, null);\n\t\t\t\t}\n\t\t\t});\n}",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "sat.baseurl",
+			"value": "https://isharesat-mw.pir.test.ishareworks.nl",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "sat.client_id",
+			"value": "EU.EORI.NLTESTPIRSAT1",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "sat.private_key",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "sat.public_key",
+			"value": "MIIE9jCCA96gAwIBAgIIZ1RK4bvfZ6wwDQYJKoZIhvcNAQELBQAwPDE6MDgGA1UEAwwxVEVTVCBpU0hBUkUgRVUgSXNzdWluZyBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eSBHNTAeFw0yMzA5MDkxMjI2NTJaFw0zMzA5MDYxMjI2NTFaMIGBMSQwIgYDVQQDDBtpU0hBUkUgVGVzdCBQSVIgU2F0ZWxsaXRlIDExHjAcBgNVBAUTFUVVLkVPUkkuTkxURVNUUElSU0FUMTEUMBIGA1UECwwLVGVzdCBhbmQgUUExFjAUBgNVBAoMDWlTSEFSRVRlc3RQSVIxCzAJBgNVBAYTAk5MMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAp2L3PjdLbKytSxywRQ9lyf4zHJGyXaLa3MBFcmd2S0kNISYlwhihJkEcxGeciF++UtYWkRQqtx3SgzVyxcnmrPsHGT4q1kHi76aV5WYmqMStUEK/YZ3Iov0e51UBWaiydM2k/cc0Bqx1iPaGXOBhGiau1/7wqCoFH407phI/pYlZ1DGe+B8QrB3Kf/Lv8tP+rsvY+rE1Y+HvlZJpTWjAU8d638LwQx116WsF1xRE8kdlbUdB4IpNOdj4K/WQa6WUwR6cUxJbbnJ81giVoNLxP3116L0zMGRULkBEP3x5LsggcKU64YmP0uFM3xFsETPWBsJEJzaSUXn2coVX0v1fn6sYygUFOZZXUwHzz5JnwDpoWwqPs877atlYCWpo3ZDXP0M04recUBopC/fCq3RQd8RYyHbGfKgx23gtONIhiFfNKzzh2PG6tWA8Jqz7Bmua9K3HglXIzqFl68aiBq4GpvxuQgmS5+ohOzzoBKMJoBbBWsiuD2bhI5Uw41hAlmdb6LlK71Jz+w0jwWxXoqQIaJjcTMNwE4sfFcSfojvODoxuWuKKZs+6xk2zmZYp4lpK2pVtUC2Uq+28gUugmMooTYkGcXvh0JNyDFKp2aqVXfd/K8581DbNMevcqAMwMmuwSRROvwnkvJPadiHAYpcoVOxOfVvNnFGoa96HoZ8e+O8CAwEAAaOBtTCBsjAfBgNVHSMEGDAWgBRtxWWJy9+RVNFrPLcCpS7NimiQHTAnBgNVHSUEIDAeBggrBgEFBQcDAgYIKwYBBQUHAwQGCCsGAQUFBwMBMDcGCCsGAQUFBwEDBCswKTAIBgYEAI5GAQEwCAYGBACORgEEMBMGBgQAjkYBBjAJBgcEAI5GAQYCMB0GA1UdDgQWBBTOxi/OaIiCNWdF8pVXsv4zUQXeOTAOBgNVHQ8BAf8EBAMCBsAwDQYJKoZIhvcNAQELBQADggEBACQ3i28EOqp9h13hvqOQ1nTqi68dFWEvACHWv8aoNk8TupmiaN8i8Bfbp7JT2TmdlmO90FLu/EIC7Yrmi6QYagQf5EafQIIGQ1GpS6NM/PromzjD0RvyGPOdspcFHmXWw5PW1sPc/avxTWSqHCWc8R/yNYbNzxlkh/DQw97V3I0yMZxiidE3pw1oFp0CXsoWz4UkuOeEtOTYDANoWd+LsJkMudX2maARxAQiX9HQZqUTAIF41lXEz+Bq1YQRwKPO/BUKDfFJu+hbkifCZscJdRjQaUvEwUXnXB+ebSRoGQFzZYXrQXxbLTvlIayX/a2Pevp7fgzlCP6I6ZnSXu7pEy4=",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "abc.client_id",
+			"value": "EU.EORI.NL000000001",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "abc.private_key",
+			"value": "-----BEGIN RSA PRIVATE KEY-----\nMIIEogIBAAKCAQEAk77MCuUC+8goJKfW4sdpeIKRZERz/mqHg9uRbAip11G6R1v0\nAIuv3TjxoejxV02i+EK3XD0CHKJMVHBiYFhfK0kJHRaVw2kbNWxuglcP50pETqKJ\n23QDBoflAlesDs7sQwmlMrGIdDDLFyq7+JSdAIdUk+qAjJ6EwlDk7qi1IP1f/OF3\nQzdSo0eu6Z4PmGcKZdtv7JHTzuhROpi9t2iwc/wDrOZ34jHj/hSX5JcaAoAxr/YR\nO20YSgQiEKoF2opMKAcWRdhafdqnvytHP0sf0N05HL3vGuoCSAKEqYikY0pT6GJs\nCze+myuNwQ1IlNTrSa7zGcPqzVAtSFEnsThkywIDAQABAoIBAAJN0WTCGX/PqUCZ\nFXLH5U8pyhakMqLfCmn1/JiQsgVXku4V8wInK4DpqGr79PeFkGsKr01S7juAFGyk\nrAQQnLtSEkBP39oCQ5hbroV90hOrRtFrG3c+oeVyLRISR+6bL3gEKH1X42bcc+5S\njkfcGW6urZT47TRELJHTLR7Dpr9y7gBiGeCUayAwV7L13uuYZ5m92qOLjJRWGnPQ\ncCJtZQNCjhJZQ64P4PCprF5knjvdZ8U6JI2tYoUW2VJg63i+M0Ckdv34ItSTelwq\n2joDhb6ARYSkFKRPdAzyEX4P8PCwzOerjoaHBcIg0VuwZ6zJ/Y1TJtG1DSX3Opgf\n41MhNVECgYEAyd9gTvYjwnRQqG9vqmOISSZzJ6ciZfvrXqRfnEC/4v8MZyTfA7cb\n2MAuUU67Rjg2nBSqK8gOyhilQ9YfYt+bqmhkJ86/r8KPs2I0101lxwWD6NXqxt+A\nlxdAQ/xYrI3qiteF4n1sapt9oVo2O9lM9zY05LUhUUhBTnrbqCZxMl8CgYEAu1wZ\n4/9ZxiMTG7FliGij10EMAcilAKO5nnFtvw4SpjdshcLPVkdAYEXC8ufFoJHEal0y\nZr+IVpc6MZWou5zUlQNW39P+6q2way8R5HS20QX1nTLi3f1EQYJjdT8dLkgpx/Iv\nppbs0nVD2DxQ8mHwko6KjW0vKQu6EI+3w+vVnRUCgYAGVg2GzPD4ZIA3mS/PEEqx\nyRQqNXO98bdEhDJADEQ5krnH7v9U9YVZO0b45Fi6bn9ATOG+eAwGydk+FNVtXAld\nwuMJ4NJhaODrx3RTIanFImYug7BXx6IYm/E3cQ8zc0zeSL96CWfCvNinnNZA8KQa\nykfEue6ux27NUMveLj61TwKBgEQ4cfjxxod9x/xiaJz1tQqw1aVkoKgN9Y16scJK\nZoH9VleSKpq40Pj9DdISkIQ573HnQ23kOcmFwRvC6bB+l202zRAtCfn7imxMtFAi\nK1sKt3coyzCXgp3z0zEi7QYoIoZ6ad1XwR2Us0JuG+9VuBo1Kr/6TJy+d16GZhxB\nqANNAoGALm+obyRIoN3i0xvsFYzq5nBHyH47FumqMz++mE7k3DVFvarJ1P6HSqeK\naVEdPdy5jULGN0jciFOcRV+LCRrmitJwDkWemOfw8B2s+Tm941FN1MBB5kQBJz8r\nMiT/0ZD932cJCnZyHiyDnJhnTb5n4bVBM2FZigqzzpCdipEBcMg=\n-----END RSA PRIVATE KEY-----",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "abc.public_key",
+			"value": "MIID2jCCAsKgAwIBAgIINqe/ESZKbs0wDQYJKoZIhvcNAQELBQAwPDE6MDgGA1UEAwwxVEVTVCBpU0hBUkUgRVUgSXNzdWluZyBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eSBHNTAeFw0yMzAyMjQxNjUwMzVaFw0zMzAyMjExNjUwMzRaMGYxFTATBgNVBAMMDEFCQyBUcnVja2luZzEcMBoGA1UEBRMTRVUuRU9SSS5OTDAwMDAwMDAwMTENMAsGA1UECwwEVGVzdDETMBEGA1UECgwKaVNIQVJFVGVzdDELMAkGA1UEBhMCTkwwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCTvswK5QL7yCgkp9bix2l4gpFkRHP+aoeD25FsCKnXUbpHW/QAi6/dOPGh6PFXTaL4QrdcPQIcokxUcGJgWF8rSQkdFpXDaRs1bG6CVw/nSkROoonbdAMGh+UCV6wOzuxDCaUysYh0MMsXKrv4lJ0Ah1ST6oCMnoTCUOTuqLUg/V/84XdDN1KjR67png+YZwpl22/skdPO6FE6mL23aLBz/AOs5nfiMeP+FJfklxoCgDGv9hE7bRhKBCIQqgXaikwoBxZF2Fp92qe/K0c/Sx/Q3Tkcve8a6gJIAoSpiKRjSlPoYmwLN76bK43BDUiU1OtJrvMZw+rNUC1IUSexOGTLAgMBAAGjgbUwgbIwHwYDVR0jBBgwFoAUbcVlicvfkVTRazy3AqUuzYpokB0wJwYDVR0lBCAwHgYIKwYBBQUHAwIGCCsGAQUFBwMEBggrBgEFBQcDATA3BggrBgEFBQcBAwQrMCkwCAYGBACORgEBMAgGBgQAjkYBBDATBgYEAI5GAQYwCQYHBACORgEGAjAdBgNVHQ4EFgQU6h8u1iZphlReD4SxckZeN3cA4SYwDgYDVR0PAQH/BAQDAgbAMA0GCSqGSIb3DQEBCwUAA4IBAQBY+5XE8N0Im+PWctdtwr5452B92gcszx/TapVbOoW4+mGLtKqDwkh/xRJN+5wFjGVlhg2W9ROEpuUcWGlbx+48wQ3OBWGXpdVeDvKaOA9KH2wDagn/A1TIiBR7MSwnFNS6CVus/khnCaMsdYl6OYItiUP8xF6YHAmtY/iT3RAzzVL+ZrOIYB66rp20O19sERlbURiFk34eF6LA78R8FACNgEuGNrmgkh7hl7Gt5Kgsylio6Smz3m5WAeqdhkY5BVn+a6wxzO7uRtZRHjhFPI7leOKd4EcLZ7UaByaU4aCxowiM+K6e/dovPZyBvXkVPV4UJOLxPg2DJT2evbzA31Ul",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "so",
+			"value": "https://scheme.isharetest.net",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "w13.client_id",
+			"value": "EU.EORI.NL000000003",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "w13.private_key",
+			"value": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEArZN3SMmO8MNe/gLFNKDvcY5dsIbiZ2RzFvefoyPe5xgkud49\nshR5irIQzR8PpLWdfqQwh+FCsnlZSLCpZ4HhwCYRP7hpZoQis3sD8lD04we8Lu08\ni26lTUqajuTFSB3Nep19PNQvgkkAA7Z43HrkYq/Kzi9p2yYBujfYf/bxrY7msGdJ\nWtECBgAjEfHpmQIyaUwY75qxDMQPmQy26cP6+iS0j1gWqw9IY/gQF+6AeS9HjVuz\noGNj1SQBXYTK/zAlFbquRWfj7U0P8PSP59Se+AbYZZf9JfrBWdnyi/ui6jlEUWvc\nI3NGXNjg0o+le19NVgTx+drcZQQX8T20xopbiQIDAQABAoIBAESPQMhxRJJ4uOaf\n9YDqKGm0D/GP9ZFdLdBekqF/o6Wn9amszLWwPKm518UNhcJLMiA5finNoeiY4dlC\nXkdSF/crkhiXIJqrioFWD6MAsxmRjpUCg62XUJeM5iuW1Q29J9JMrpD+Rp2xc94D\njw2XROpuAS8brzYudvQ05sD0q1UfuwTyNWotBNaBdnpLjR/qrJ+9vKRMroy0rgPo\nHTBCUW/zXhKdheWsrak89Kz5Mm9keG+Dqj6WzrZRzYONqqSqcM2LgSbrDrWNO15s\nJmF/bwF905FPSd9FOwrw9Ko4yjKXH2yNGUMYvwnvruttEOFO3Fnhb1KohonViqEI\niOBip1kCgYEA7Fuc1vF9ysvAx+wMMtIy6yrg3+zORl01LnlVRTae40ZywY4tVi7g\nLaua4noZiJ0iB5OuL/i9i8UpXBsSZw5WLxgB+n5CAfwwdjZNfwyT1TgdJXr9ajFg\nJLSOXXEcC50thpIJUqWsEJQn7YIbwWTjuAzGAXvKCE/TjkSlb0q6aAcCgYEAvAA0\nGlnz1MrAB1i/uWSHl/9cFoQUuHF1p2wzaITEl/xvNu0JM5tjvjHXNzXGky2wze33\ntTLmziRYrTyj0PWloX7G0U3IIje5M6cnvYLXt4YmXtgkOXMouJyNjKXOhH9KlDwR\nFsBQkvna0G7QS6q6qW8Bkq342CxozfcrhvaBm+8CgYEAp++L57kcPMw6xJH2NOHf\nJfKIZvJVue8eC1BQguYFTMzQWrBPjC2wQSLt4L8Kh2PGOwX2PMWKv9WtxnDByZGJ\nMNrpBPdSpSBvun5o372rCFNfejMB/cLpYgscIE5us93Q7A21LBDkyb7LA9lvKSEr\nH6mLwqAW84LseOhTd1jsS18CgYBHXwxotJ2MuywLnfWrPC791UPwiFQVcX1pAfrC\nQyUfTgYqo/JKVUOYgPNjUlcAqOfmReE0OQ7GU6YWnl7ShW9L0AVKkGzaEK2OnnbH\ny1R5p8QJXaTi6oUbENPsAUZVpr15aRRTvs7X/WLEnk0VbMtQZ4QBW2qNJs7i4mLz\n6cFqoQKBgQCxeO5NOfC+CihG0sjqqw0fhGgdPwEaCx+stVfWY2vX5g/LC8jHz0xA\nvlTv9oLD8gkJPPpoRl5IYB82wLEdpO3pYh9aL/ndmLyDkZF0MjkRzDDPHCALmyLJ\npGfLp4o9DEFx5KGoSGxnZPolc0/1lSG9bS8brvmCsk2n/E4FfAZXfA==\n-----END RSA PRIVATE KEY-----",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "w13.public_key",
+			"value": "MIID2jCCAsKgAwIBAgIIS9n4YKiHSN4wDQYJKoZIhvcNAQELBQAwPDE6MDgGA1UEAwwxVEVTVCBpU0hBUkUgRVUgSXNzdWluZyBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eSBHNTAeFw0yMzAyMjQxNjQ5MThaFw0zMzAyMjExNjQ5MTdaMGYxFTATBgNVBAMMDFdhcmVob3VzZSAxMzEcMBoGA1UEBRMTRVUuRU9SSS5OTDAwMDAwMDAwMzENMAsGA1UECwwEVGVzdDETMBEGA1UECgwKaVNIQVJFVGVzdDELMAkGA1UEBhMCTkwwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCtk3dIyY7ww17+AsU0oO9xjl2whuJnZHMW95+jI97nGCS53j2yFHmKshDNHw+ktZ1+pDCH4UKyeVlIsKlngeHAJhE/uGlmhCKzewPyUPTjB7wu7TyLbqVNSpqO5MVIHc16nX081C+CSQADtnjceuRir8rOL2nbJgG6N9h/9vGtjuawZ0la0QIGACMR8emZAjJpTBjvmrEMxA+ZDLbpw/r6JLSPWBarD0hj+BAX7oB5L0eNW7OgY2PVJAFdhMr/MCUVuq5FZ+PtTQ/w9I/n1J74Bthll/0l+sFZ2fKL+6LqOURRa9wjc0Zc2ODSj6V7X01WBPH52txlBBfxPbTGiluJAgMBAAGjgbUwgbIwHwYDVR0jBBgwFoAUbcVlicvfkVTRazy3AqUuzYpokB0wJwYDVR0lBCAwHgYIKwYBBQUHAwIGCCsGAQUFBwMEBggrBgEFBQcDATA3BggrBgEFBQcBAwQrMCkwCAYGBACORgEBMAgGBgQAjkYBBDATBgYEAI5GAQYwCQYHBACORgEGAjAdBgNVHQ4EFgQU/X5XcVK4rrd+Q8zS4DvxeKeks7AwDgYDVR0PAQH/BAQDAgbAMA0GCSqGSIb3DQEBCwUAA4IBAQBXzxeCsncbkG5uaSba3EttvhTMi+Neg3t5jR9QM6eJbQ92si+IavheUpbLEp3AozXZ/xxqfueAUkjUhuuGLIvV1N05ST2/ecOUM5lyLLToX/Kms5//Tp8xaOB5Tng7QKz1s6GEJJswVaS0Rysc98OGtOaImvyFnneEbPGPE4xdn2HF1g4z91Ma67tmqmiriPvnoNP9SfEXCeNYGo886FTAi/0iRR0tA3a5yNDi8npfbpGHjDF98Lg6s5AMyK7mG9ELOFqjB8+kMHyxA64N2p1fpBxpzzQIJoR0g4x17UnLHLPy8bQD/HJ3WOarYcDrBMGB+RZ7mL8LqFJmj3I9MHvH",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "so.client_id",
+			"value": "EU.EORI.NL000000000",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2024-02-12T15:20:38.420Z",
+	"_postman_exported_using": "Postman/10.22.2"
+}
